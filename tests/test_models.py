@@ -1,27 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-"""
-test_django-stored-messages
-------------
-
-Tests for `django-stored-messages` modules module.
-"""
-
-import os
-import shutil
-import unittest
+from django.test import TestCase
+from django.test.client import RequestFactory
+from django.contrib.messages import add_message, ERROR, get_messages
+from django.contrib.messages.storage import default_storage
 
 from stored_messages import models
 
 
-class TestStored_messages(unittest.TestCase):
+class TestMessage(TestCase):
+    """
 
+    """
     def setUp(self):
-        pass
+        self.factory = RequestFactory()
 
     def test_something(self):
-        pass
+        request = self.factory.get('/')
+        request._messages = default_storage(request)
+        add_message(request, ERROR, 'here iam')
+        storage = get_messages(request)
+        for message in storage:
+            pass
 
     def tearDown(self):
         pass

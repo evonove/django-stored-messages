@@ -4,14 +4,14 @@
 import os
 import sys
 
-import django-stored-messages
+import stored_messages
 
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
-version = django-stored-messages.__version__
+version = stored_messages.__version__
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')

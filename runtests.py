@@ -17,10 +17,12 @@ try:
             "django.contrib.auth",
             "django.contrib.contenttypes",
             "django.contrib.sites",
+            "django.contrib.messages",
             "stored_messages",
         ],
         SITE_ID=1,
         NOSE_ARGS=['-s'],
+        MESSAGE_STORAGE='django.contrib.messages.storage.cookie.CookieStorage',
     )
 
     from django_nose import NoseTestSuiteRunner

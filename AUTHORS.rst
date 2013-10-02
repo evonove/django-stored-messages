@@ -2,11 +2,6 @@
 Credits
 =======
 
-Development Lead
-----------------
-
-* evonove <info@evonove.it>
-
 Contributors
 ------------
 
