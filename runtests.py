@@ -22,7 +22,8 @@ try:
         ],
         SITE_ID=1,
         NOSE_ARGS=['-s'],
-        MESSAGE_STORAGE='django.contrib.messages.storage.cookie.CookieStorage',
+        #MESSAGE_STORAGE='django.contrib.messages.storage.fallback.FallbackStorage',
+        MESSAGE_STORAGE='stored_messages.storage.PersistentStorage',
     )
 
     from django_nose import NoseTestSuiteRunner
