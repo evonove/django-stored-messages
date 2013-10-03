@@ -42,8 +42,8 @@ class StorageMixin(object):
             return
         # Check if the message has to be persisted
         if level in STORE_LEVELS:
-            m = Message.objects.get_or_create(message=message, level=level, tags=extra_tags)[0]
-            MessageArchive.objects.create(user=self.user, message=m, date=timezone.now())
+            m = Message.objects.create(message=message, level=level, tags=extra_tags)
+            MessageArchive.objects.create(user=self.user, message=m)
             Inbox.objects.create(user=self.user, message=m)
         else:
             super(StorageMixin, self).add(level, message, extra_tags)

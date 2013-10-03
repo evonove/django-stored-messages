@@ -3,14 +3,14 @@ from django.test.client import RequestFactory
 
 
 
-class TestMessage(TestCase):
+class TestInbox(TestCase):
     """
 
     """
     def setUp(self):
         pass
 
-    def test_something(self):
+    def test_expire(self):
         pass
 
     def tearDown(self):

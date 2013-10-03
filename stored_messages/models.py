@@ -15,6 +15,7 @@ class Message(models.Model):
     message = models.TextField()
     level = models.IntegerField()
     tags = models.TextField()
+    date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.message
@@ -27,7 +28,6 @@ class MessageArchive(models.Model):
     """
     user = models.ForeignKey(AUTH_USER_MODEL)
     message = models.ForeignKey(Message)
-    date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return "[%s] %s" % (self.user, self.message)
@@ -43,6 +43,7 @@ class Inbox(models.Model):
 
     def expired(self):
         if INBOX_EXPIRE_DAYS:
+            date_sent = MessageArchive.objects.get(self.user, self.message)
             expiration_date = self.message.date + timezone.timedelta(days=INBOX_EXPIRE_DAYS)
             return expiration_date <= timezone.now()
         else:
