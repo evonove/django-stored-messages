@@ -3,11 +3,11 @@ This module is largely inspired by django-rest-framework settings.
 
 Settings for the Stored Messages framework are all namespaced in the
 STORED_MESSAGES setting.
-For example your project's `settings.py` file might look like this:
+For example your project's `settings.py` file might look like this::
 
-STORED_MESSAGES = {
-
-}
+    STORED_MESSAGES = {
+        'INBOX_EXPIRE_DAYS': 30,
+    }
 
 This module provides the `stored_messages_settings` object, that is used to
 access Stored Messages framework settings, checking for user settings first,
