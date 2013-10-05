@@ -17,3 +17,9 @@ def message_create(request):
     stored_messages.add_message(request, stored_messages.STORED_ERROR, "an error")
     stored_messages.add_message(request, stored_messages.STORED_DEBUG, "a debug message")
     return HttpResponse()
+
+
+def message_create_mixed(request):
+    stored_messages.add_message(request, stored_messages.STORED_ERROR, "an error")
+    stored_messages.add_message(request, stored_messages.ERROR, "an error not persisted")
+    return HttpResponse()
