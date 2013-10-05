@@ -1,11 +1,10 @@
 from django.test import TestCase
-from django.test.utils import override_settings
 from django.test.client import RequestFactory
-from django.contrib.messages import add_message, get_messages, ERROR, DEBUG
 from django.contrib.messages.storage import default_storage
 
 from stored_messages.compat import get_user_model
 from stored_messages.models import Inbox, MessageArchive
+from stored_messages import add_message, get_messages, STORED_ERROR, DEBUG
 
 import mock
 
@@ -22,7 +21,7 @@ class TestStorage(TestCase):
     def test_store(self):
         self.request._messages = default_storage(self.request)
         self.request._messages.level = DEBUG
-        add_message(self.request, ERROR, "an SOS to the world")
+        add_message(self.request, STORED_ERROR, "an SOS to the world")
         add_message(self.request, DEBUG, "this won't be persisted")
         storage = get_messages(self.request)
         self.assertEqual(len(storage), 2)
@@ -34,16 +33,14 @@ class TestStorage(TestCase):
         inbox_msg = Inbox.objects.filter(user=self.user).count()
         self.assertEqual(inbox_msg, 1)
         self.client.get('/consume')
-        inbox_msg = Inbox.objects.filter(user=self.user).count()
-        self.assertEqual(inbox_msg, 0)
+        self.assertEqual(Inbox.objects.filter(user=self.user).count(), 0)
         self.assertEqual(MessageArchive.objects.filter(user=self.user).count(), 1)
 
     def test_store_keep_unread(self):
         self.client.login(username='test_user', password='123456')
         self.client.get('/create')
         self.client.get('/consume', data={'keep_storage': True})
-        inbox_msg = Inbox.objects.filter(user=self.user).count()
-        self.assertEqual(inbox_msg, 1)
+        self.assertEqual(Inbox.objects.filter(user=self.user).count(), 1)
         self.assertEqual(MessageArchive.objects.filter(user=self.user).count(), 1)
 
     def tearDown(self):

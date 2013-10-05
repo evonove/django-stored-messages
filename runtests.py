@@ -40,7 +40,6 @@ def run_tests(*test_args):
     test_runner = NoseTestSuiteRunner(verbosity=1)
 
     failures = test_runner.run_tests(test_args)
-
     sys.exit(failures)
 
 if __name__ == '__main__':

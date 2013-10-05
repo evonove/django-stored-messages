@@ -1,11 +1,7 @@
-from django.contrib.messages.storage.base import BaseStorage
 from django.contrib.messages.storage.fallback import FallbackStorage
-from django.utils import timezone
 
 from .models import Inbox, Message, MessageArchive
-
-
-STORE_LEVELS = (30, 40)  # TODO move it to settings
+from .settings import stored_messages_settings
 
 
 class StorageMixin(object):
@@ -46,7 +42,7 @@ class StorageMixin(object):
         if level < self.level:
             return
         # Check if the message doesn't have a level that needs to be persisted
-        if level not in STORE_LEVELS:
+        if level not in stored_messages_settings.STORE_LEVELS or self.user.is_anonymous():
             return super(StorageMixin, self).add(level, message, extra_tags)
 
         self.added_new = True
@@ -56,7 +52,8 @@ class StorageMixin(object):
 
     def _store(self, messages, response, *args, **kwargs):
         """
-        persistent messages are already in the database, so we can say they're already "stored"
+        persistent messages are already in the database, so we can say they're
+        already "stored"
         Here we put them in the inbox, or remove from the inbox in case the messages were
         iterated.
 
@@ -80,7 +77,8 @@ class StorageMixin(object):
 
     def _prepare_messages(self, messages):
         """
-        Prepares a list of messages for storage.
+        Like the base class method, prepares a list of messages for storage
+        but avoid to do this for `models.Message` instances.
         """
         for message in messages:
             if not isinstance(message, Message):
