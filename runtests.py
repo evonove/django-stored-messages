@@ -41,9 +41,7 @@ def run_tests(*test_args):
 
     failures = test_runner.run_tests(test_args)
 
-    if failures:
-        sys.exit(failures)
-
+    sys.exit(failures)
 
 if __name__ == '__main__':
     parser = OptionParser()

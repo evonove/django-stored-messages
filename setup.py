@@ -32,11 +32,12 @@ setup(
     author_email='info@evonove.it',
     url='https://github.com/evonove/django-stored-messages',
     packages=[
-        'django-stored-messages',
+        'stored_messages',
     ],
     include_package_data=True,
     install_requires=[
     ],
+    test_suite='runtests.run_tests',
     license="BSD",
     zip_safe=False,
     keywords='django-stored-messages',
