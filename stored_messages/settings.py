@@ -30,6 +30,7 @@ DEFAULTS = {
         STORED_WARNING,
         STORED_ERROR,
     ),
+    'INBOX_EXPIRE_DAYS': 30,
 }
 
 # List of settings that cannot be empty

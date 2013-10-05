@@ -3,6 +3,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 
 from .compat import AUTH_USER_MODEL
+from .settings import stored_messages_settings
 
 INBOX_EXPIRE_DAYS = 30  # TODO move to settings
 
@@ -42,10 +43,7 @@ class Inbox(models.Model):
     message = models.ForeignKey(Message)
 
     def expired(self):
-        if INBOX_EXPIRE_DAYS:
-            date_sent = MessageArchive.objects.get(self.user, self.message)
-            expiration_date = self.message.date + timezone.timedelta(days=INBOX_EXPIRE_DAYS)
-            return expiration_date <= timezone.now()
-        else:
-            return False
+        expiration_date = self.message.date + timezone.timedelta(
+            days=stored_messages_settings.INBOX_EXPIRE_DAYS)
+        return expiration_date <= timezone.now()
     expired.boolean = True  # show a nifty icon in the admin
