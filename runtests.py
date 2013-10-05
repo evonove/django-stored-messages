@@ -18,6 +18,7 @@ try:
             "django.contrib.contenttypes",
             "django.contrib.sites",
             "django.contrib.messages",
+            "django.contrib.sessions",
             "stored_messages",
         ],
         SITE_ID=1,
