@@ -21,6 +21,7 @@ from django.utils import six, importlib
 from .constants import *
 
 USER_SETTINGS = getattr(settings, 'STORED_MESSAGES', None)
+MESSAGE_TAGS = getattr(settings, 'MESSAGE_TAGS', None)
 
 DEFAULTS = {
     'STORE_LEVELS': (
@@ -30,6 +31,13 @@ DEFAULTS = {
         STORED_WARNING,
         STORED_ERROR,
     ),
+    'MESSAGE_TAGS': MESSAGE_TAGS.update({
+        STORED_DEBUG: 'stored debug',
+        STORED_INFO: 'stored info',
+        STORED_SUCCESS: 'stored success',
+        STORED_WARNING: 'stored warning',
+        STORED_ERROR: 'stored error',
+    }),
     'INBOX_EXPIRE_DAYS': 30,
 }
 
