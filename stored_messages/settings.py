@@ -21,7 +21,7 @@ from django.utils import six, importlib
 from .constants import *
 
 USER_SETTINGS = getattr(settings, 'STORED_MESSAGES', None)
-MESSAGE_TAGS = getattr(settings, 'MESSAGE_TAGS', None)
+MESSAGE_TAGS = getattr(settings, 'MESSAGE_TAGS', {})
 
 DEFAULTS = {
     'STORE_LEVELS': (
