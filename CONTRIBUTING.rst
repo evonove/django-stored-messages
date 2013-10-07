@@ -103,10 +103,3 @@ Before you submit a pull request, check that it meets these guidelines:
 3. The pull request should work for Python 2.6, 2.7, and 3.3, and for PyPy. Check 
    https://travis-ci.org/evonove/django-stored-messages/pull_requests
    and make sure that the tests pass for all supported Python versions.
-
-Tips
-----
-
-To run a subset of tests::
-
-	$ python -m unittest tests.test_stored_messages
