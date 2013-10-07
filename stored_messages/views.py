@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .models import Inbox
 from .serializers import InboxSerializer
@@ -25,3 +26,4 @@ class InboxViewSet(viewsets.ReadOnlyModelViewSet):
         """
         inbox_m = self.get_object()
         inbox_m.delete()
+        return Response({'status': 'message marked as read'})
