@@ -1,4 +1,3 @@
-from .models import Inbox
 
 __all__ = (
     'add_message_for', 'broadcast_message',
@@ -26,6 +25,7 @@ def mark_read(user, message):
 
     :return: The message was actually deleted
     """
+    from .models import Inbox
     try:
         inbox_m = Inbox.objects.filter(user=user, message=message).get()
         inbox_m.delete()
