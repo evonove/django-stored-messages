@@ -23,5 +23,12 @@ def broadcast_message(level, message, extra_tags='', fail_silently=False):
 def mark_read(user, message):
     """
     Mark message as read for user.
+
+    :return: The message was actually deleted
     """
-    Inbox.objects.filter(user=user, message=message).delete()
+    try:
+        inbox_m = Inbox.objects.filter(user=user, message=message).get()
+        inbox_m.delete()
+        return True
+    except Inbox.DoesNotExist:
+        return False
