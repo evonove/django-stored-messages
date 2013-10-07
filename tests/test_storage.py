@@ -1,23 +1,14 @@
-from django.test import TestCase
-from django.test.client import RequestFactory
+from . import BaseTest
+
 from django.contrib.messages.storage import default_storage
 
-from stored_messages.compat import get_user_model
 from stored_messages.models import Inbox, MessageArchive
 from stored_messages import add_message, get_messages, STORED_ERROR, DEBUG, ERROR
 
 import mock
 
 
-class TestStorage(TestCase):
-    urls = 'tests.urls'
-
-    def setUp(self):
-        self.user = get_user_model().objects.create_user("test_user", "t@user.com", "123456")
-        self.request = RequestFactory().get('/')
-        self.request.session = mock.MagicMock()
-        self.request.user = self.user
-
+class TestStorage(BaseTest):
     def test_store(self):
         self.request._messages = default_storage(self.request)
         self.request._messages.level = DEBUG
@@ -63,6 +54,3 @@ class TestStorage(TestCase):
         self.client.get('/create_mixed')
         self.client.get('/consume')
         self.assertEqual(Inbox.objects.filter(user=self.user).count(), 0)
-
-    def tearDown(self):
-        self.user.delete()
