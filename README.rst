@@ -33,15 +33,37 @@ Install the app::
 
     pip install django-stored-messages
 
-Then use it in a project through the django.contrib.messages api::
+Add it to the installed apps::
+
+    INSTALLED_APPS = (
+        # ...
+        'stored_messages',
+    )
+
+Then use it in a project through the django.contrib.messages api. The app provides for convenience
+some message levels which are persisted by default::
 
 	import stored_messages
 	from django.contrib import messages
 
-    # ok, standard message
+    # standard message
 	messages.add_message(request, messages.INFO, 'Hello world.')
 	# this will be persisted and marked as 'unread'
 	messages.add_message(request, stored_messages.STORED_INFO, 'Hello world, going to the database!')
+
+stored_messages expose the same api as well, so one can do::
+
+    import stored_messages
+    messages.add_message(request, stored_messages.INFO, 'Hello!')
+
+If you want to use standard message levels but persist the messages, just add something like this
+to the settings::
+
+    from django.contrib import messages
+    STORED_MESSAGES = {
+        # persist standard infos and standard errors
+        'STORE_LEVELS': (messages.INFO, messages.ERROR,),
+    }
 
 Iterating the messages will automatically mark them as read (but still persisted)::
 
@@ -63,6 +85,7 @@ Features
 
 * Seamless integration with `django.contrib.messages`
 * Stored messages are archived in the database
+* Users can configure which message levels have to be persisted
 * REST api to retrieve and mark messages as read (needs djangorestframework to be installed)
 
 TODO
