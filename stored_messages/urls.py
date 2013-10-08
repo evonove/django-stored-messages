@@ -1,12 +1,19 @@
-from django.conf.urls import patterns, url, include
-from rest_framework.routers import DefaultRouter
+"""
+At the moment this module does something only when restframework is available
+"""
 
-from . import views
+try:
+    from django.conf.urls import patterns, url, include
+    from rest_framework.routers import DefaultRouter
 
-router = DefaultRouter()
-router.register(r'inbox', views.InboxViewSet)
+    from . import views
 
-urlpatterns = patterns(
-    '',
-    url(r'^', include(router.urls)),
-)
+    router = DefaultRouter()
+    router.register(r'inbox', views.InboxViewSet)
+
+    urlpatterns = patterns(
+        '',
+        url(r'^', include(router.urls)),
+    )
+except ImportError:
+    pass
