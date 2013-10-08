@@ -24,7 +24,7 @@ readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
-    name='Django Stored Messages',
+    name='django-stored-messages',
     version=version,
     description='Django contrib.messages on steroids',
     long_description=readme + '\n\n' + history,
