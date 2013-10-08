@@ -10,7 +10,7 @@ def add_message_for(users, level, message, extra_tags='', fail_silently=False):
     Send a message to a list of users
     """
     # TODO
-    pass
+    raise NotImplementedError
 
 
 def broadcast_message(level, message, extra_tags='', fail_silently=False):
@@ -18,7 +18,7 @@ def broadcast_message(level, message, extra_tags='', fail_silently=False):
     Send a message to all users in the system
     """
     # TODO
-    pass
+    raise NotImplementedError
 
 
 def mark_read(user, message):
