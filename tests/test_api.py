@@ -1,10 +1,14 @@
 from . import BaseTest
 
+from django.core.urlresolvers import reverse
+
 from stored_messages import mark_read, add_message_for, broadcast_message
 from stored_messages.models import Inbox, MessageArchive
 
 from stored_messages.compat import get_user_model
 import stored_messages
+
+import json
 
 
 class TestApi(BaseTest):
@@ -25,9 +29,21 @@ class TestApi(BaseTest):
 
     def test_add_message_for(self):
         user2 = get_user_model().objects.create_user("another_user", "u@user.com", "123456")
-        self.assertRaises(NotImplementedError,
-                          add_message_for,
-                          [user2, self.user], stored_messages.STORED_ERROR, 'Multiple errors')
+        add_message_for([user2, self.user], stored_messages.STORED_ERROR, 'Multiple errors')
+        self.assertEqual(Inbox.objects.count(), 2)
+        self.assertEqual(MessageArchive.objects.count(), 2)
+
+        self.client.login(username='another_user', password='123456')
+        r = self.client.get(reverse('stored_messages:inbox-list'))
+        messages = json.loads(r.content.decode('utf-8'))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0]['message']['message'], 'Multiple errors')
+
+        self.client.login(username='test_user', password='123456')
+        r = self.client.get(reverse('stored_messages:inbox-list'))
+        messages = json.loads(r.content.decode('utf-8'))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0]['message']['message'], 'Multiple errors')
 
     def test_broadcast_message(self):
         self.assertRaises(NotImplementedError,

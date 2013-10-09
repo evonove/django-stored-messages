@@ -4,13 +4,17 @@ __all__ = (
     'mark_read',
 )
 
+from .models import Message, MessageArchive, Inbox
+
 
 def add_message_for(users, level, message, extra_tags='', fail_silently=False):
     """
-    Send a message to a list of users
+    Send a message to a list of users without passing through `django.contrib.messages`
     """
-    # TODO
-    raise NotImplementedError
+    m = Message.objects.create(message=message, level=level, tags=extra_tags)
+    for u in users:
+        MessageArchive.objects.create(user=u, message=m)
+        Inbox.objects.create(user=u, message=m)
 
 
 def broadcast_message(level, message, extra_tags='', fail_silently=False):
