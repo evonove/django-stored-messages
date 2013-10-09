@@ -29,7 +29,7 @@ The full documentation is at http://django-stored-messages.rtfd.org.
 Quickstart
 ----------
 
-Install the app::
+Follow instruction for firing up [django.contrib.messages](http://docs.djangoproject.com/en/dev/ref/contrib/messages/), then install the app::
 
     pip install django-stored-messages
 
@@ -49,7 +49,7 @@ some message levels which are persisted by default::
     # standard message
 	messages.add_message(request, messages.INFO, 'Hello world.')
 	# this will be persisted and marked as 'unread'
-	messages.add_message(request, stored_messages.STORED_INFO, 'Hello world, going to the database!')
+	messages.add_message(request, stored_messages.STORED_INFO, 'Hello world, to the database!')
 
 stored_messages expose the same api as well, so one can do::
 
