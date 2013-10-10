@@ -17,9 +17,9 @@ Django Stored Messages
 
 Django contrib.messages on steroids
 
-The app integrates smoothly with Django's [messages framework](http://docs.djangoproject.com/en/dev/ref/contrib/messages/) (`django.contrib.messages`),
-but users can decide which messages have to be stored on the database backend and kept available
-over sessions.
+The app integrates smoothly with Django's `messages framework <http://docs.djangoproject.com/en/dev/ref/contrib/messages/>`_
+(`django.contrib.messages`), but users can decide which messages have to be stored on the database
+backend and kept available over sessions.
 
 Documentation
 -------------
@@ -29,7 +29,8 @@ The full documentation is at http://django-stored-messages.rtfd.org.
 Quickstart
 ----------
 
-Follow instruction for firing up [django.contrib.messages](http://docs.djangoproject.com/en/dev/ref/contrib/messages/), then install the app::
+Follow instruction for firing up `django.contrib.messages <http://docs.djangoproject.com/en/dev/ref/contrib/messages/>`_,
+then install the app::
 
     pip install django-stored-messages
 
@@ -40,16 +41,20 @@ Add it to the installed apps::
         'stored_messages',
     )
 
+In the settings, tell Django which is the message storage::
+
+    MESSAGE_STORAGE = 'stored_messages.storage.PersistentStorage'
+
 Then use it in a project through the django.contrib.messages api. The app provides for convenience
 some message levels which are persisted by default::
 
-	import stored_messages
-	from django.contrib import messages
+    import stored_messages
+    from django.contrib import messages
 
     # standard message
-	messages.add_message(request, messages.INFO, 'Hello world.')
-	# this will be persisted and marked as 'unread'
-	messages.add_message(request, stored_messages.STORED_INFO, 'Hello world, to the database!')
+    messages.add_message(request, messages.INFO, 'Hello world.')
+    # this will be persisted and marked as 'unread'
+    messages.add_message(request, stored_messages.STORED_INFO, 'Hello world, to the database!')
 
 stored_messages expose the same api as well, so one can do::
 
@@ -84,9 +89,10 @@ Features
 --------
 
 * Seamless integration with `django.contrib.messages`
+* All the features are in a mixin you can attach to your existing storage
 * Stored messages are archived in the database
 * Users can configure which message levels have to be persisted
-* REST api to retrieve and mark messages as read (needs djangorestframework to be installed)
+* REST api to retrieve and mark messages as read (needs djangorestframework being installed)
 
 TODO
 ----
