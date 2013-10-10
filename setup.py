@@ -4,6 +4,8 @@
 import os
 import sys
 
+version = '0.1.1'
+
 try:
     from setuptools import setup
 except ImportError:
@@ -21,7 +23,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='django-stored-messages',
-    version='0.1.1',
+    version=version,
     description='Django contrib.messages on steroids',
     long_description=readme + '\n\n' + history,
     author='evonove',
