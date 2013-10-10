@@ -22,6 +22,10 @@ cwd = os.getcwd()
 parent = os.path.dirname(cwd)
 sys.path.append(parent)
 
+# django setup
+from django.conf import settings
+settings.configure()
+
 import stored_messages
 
 # -- General configuration -----------------------------------------------------
