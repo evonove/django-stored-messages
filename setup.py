@@ -4,14 +4,10 @@
 import os
 import sys
 
-import stored_messages
-
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
-
-version = stored_messages.__version__
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
@@ -25,7 +21,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='django-stored-messages',
-    version=version,
+    version='0.1.0',
     description='Django contrib.messages on steroids',
     long_description=readme + '\n\n' + history,
     author='evonove',
