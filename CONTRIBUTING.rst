@@ -77,7 +77,7 @@ Now you can make your changes locally.
 5. When you're done making changes, check that your changes pass the tests, including testing
 other Python versions with tox::
 
-	$ python setup.py test
+    $ python setup.py test
     $ tox
 
 To get tox, just pip install it into your virtualenv.
