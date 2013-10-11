@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from . import BaseTest
 
 from django.core.urlresolvers import reverse
@@ -23,8 +25,8 @@ class TestRESTApi(BaseTest):
         r = self.client.get(reverse('stored_messages:inbox-list'))
         messages = json.loads(r.content.decode('utf-8'))
         self.assertEqual(len(messages), 2)
-        self.assertEqual(messages[0]['message']['message'], 'an error')
-        self.assertEqual(messages[1]['message']['message'], 'an error')
+        self.assertEqual(messages[0]['message']['message'], 'an error ☢')
+        self.assertEqual(messages[1]['message']['message'], 'an error ☢')
         self.assertEqual(messages[0]['message']['level'], STORED_ERROR)
         self.assertEqual(messages[1]['message']['level'], STORED_ERROR)
 

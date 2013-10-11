@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from . import BaseTest
 
 from django.core.urlresolvers import reverse
@@ -48,4 +50,4 @@ class TestApi(BaseTest):
     def test_broadcast_message(self):
         self.assertRaises(NotImplementedError,
                           broadcast_message,
-                          stored_messages.STORED_INFO, 'one for all')
+                          stored_messages.STORED_INFO, 'one ☢ for all')

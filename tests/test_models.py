@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from . import BaseTest
 
 from django.utils.timezone import timedelta, now
@@ -10,7 +12,7 @@ from stored_messages.models import MessageArchive, Inbox
 class TestInbox(BaseTest):
     def test_expire(self):
         self.request._messages = default_storage(self.request)
-        add_message(self.request, STORED_ERROR, "an SOS to the world")
+        add_message(self.request, STORED_ERROR, "an SOS to the world ☢")
         ma = MessageArchive.objects.all()[0]
         ma.message.date = now() - timedelta(days=365)
         ma.message.save()

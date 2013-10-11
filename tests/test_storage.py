@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from . import BaseTest
 
 from django.contrib.messages.storage import default_storage
@@ -12,8 +14,8 @@ class TestStorage(BaseTest):
     def test_store(self):
         self.request._messages = default_storage(self.request)
         self.request._messages.level = DEBUG
-        add_message(self.request, STORED_ERROR, "an SOS to the world")
-        add_message(self.request, DEBUG, "this won't be persisted")
+        add_message(self.request, STORED_ERROR, "an SOS to the world ☢")
+        add_message(self.request, DEBUG, "this won't be persisted ☢")
         storage = get_messages(self.request)
         self.assertEqual(len(storage), 2)
         self.assertEqual(MessageArchive.objects.filter(user=self.user).count(), 1)
@@ -39,8 +41,8 @@ class TestStorage(BaseTest):
         self.request.user.is_anonymous.return_value = True
         self.request.user.is_authenticated.return_value = False
         self.request._messages = default_storage(self.request)
-        add_message(self.request, STORED_ERROR, "an SOS to the world")
-        add_message(self.request, ERROR, "this error won't be persisted")
+        add_message(self.request, STORED_ERROR, "an SOS to the world ☢")
+        add_message(self.request, ERROR, "this error won't be persisted ☢")
         storage = get_messages(self.request)
         self.assertEqual(len(storage), 2)
 
