@@ -59,7 +59,7 @@ some message levels which are persisted by default::
 stored_messages expose the same api as well, so one can do::
 
     import stored_messages
-    messages.add_message(request, stored_messages.INFO, 'Hello!')
+    stored_messages.add_message(request, stored_messages.INFO, 'Hello!')
 
 If you want to use standard message levels but persist the messages, just add something like this
 to the settings::
