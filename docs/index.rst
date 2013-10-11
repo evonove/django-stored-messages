@@ -19,6 +19,7 @@ Contents:
 
    installation
    usage
+   advanced_usage
    contributing
    authors
    history
