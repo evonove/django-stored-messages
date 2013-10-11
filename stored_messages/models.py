@@ -1,6 +1,7 @@
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
 from .compat import AUTH_USER_MODEL
 from .settings import stored_messages_settings
@@ -42,8 +43,14 @@ class Inbox(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL)
     message = models.ForeignKey(Message)
 
+    class Meta:
+        verbose_name_plural = _('inboxes')
+
     def expired(self):
         expiration_date = self.message.date + timezone.timedelta(
             days=stored_messages_settings.INBOX_EXPIRE_DAYS)
         return expiration_date <= timezone.now()
     expired.boolean = True  # show a nifty icon in the admin
+
+    def __str__(self):
+        return "[%s] %s" % (self.user, self.message)
