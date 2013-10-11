@@ -29,3 +29,12 @@ class TestStoredMessagesTags(BaseTest):
         render = t.render(RequestContext(self.factory.get("/")))
 
         self.assertInHTML("<li>[test_user] unicode message ❤</li>", render, 0)
+
+    def assertInHTML(self, needle, haystack, count=None, msg_prefix=''):
+        import django
+        if django.VERSION < (1, 5):
+            real_count = haystack.count(needle)
+            return self.assertEqual(real_count, count)
+        else:
+            return super(TestStoredMessagesTags, self).assertInHTML(
+                needle, haystack, count, msg_prefix)
