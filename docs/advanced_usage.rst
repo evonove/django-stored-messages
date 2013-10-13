@@ -1,13 +1,13 @@
 Advanced Usage
 ==============
 
-Interact with stored messages through a REST api
-------------------------------------------------
+Interact with stored messages through the REST api
+--------------------------------------------------
 
 Todo
 
-Write a custom storage
-----------------------
+Writing a custom storage
+------------------------
 
 Todo
 
