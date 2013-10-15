@@ -4,7 +4,7 @@ from . import BaseTest
 
 from django.core.urlresolvers import reverse
 
-from stored_messages import mark_read, add_message_for, broadcast_message
+from stored_messages import mark_read, add_message_for, broadcast_message, mark_all_read
 from stored_messages.models import Inbox, MessageArchive
 
 from stored_messages.compat import get_user_model
@@ -51,3 +51,11 @@ class TestApi(BaseTest):
         self.assertRaises(NotImplementedError,
                           broadcast_message,
                           stored_messages.STORED_INFO, 'one ☢ for all')
+
+    def test_mark_all_read(self):
+        for i in range(20):
+            stored_messages.add_message_for([self.user], stored_messages.INFO, "unicode message ❤")
+        inbox = Inbox.objects.filter(user=self.user)
+        self.assertEqual(len(inbox), 20)
+        mark_all_read(self.user)
+        self.assertEqual(Inbox.objects.filter(user=self.user).count(), 0)

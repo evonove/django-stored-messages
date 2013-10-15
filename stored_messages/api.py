@@ -1,7 +1,7 @@
 
 __all__ = (
     'add_message_for', 'broadcast_message',
-    'mark_read',
+    'mark_read', 'mark_all_read',
 )
 
 from .models import Message, MessageArchive, Inbox
@@ -47,3 +47,13 @@ def mark_read(user, message):
         return True
     except Inbox.DoesNotExist:
         return False
+
+
+def mark_all_read(user):
+    """
+    Mark all message instances for a user as read.
+
+    :param user: user instance for the recipient
+    """
+    from .models import Inbox
+    Inbox.objects.filter(user=user).delete()
