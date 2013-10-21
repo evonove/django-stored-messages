@@ -14,6 +14,7 @@ try:
     urlpatterns = patterns(
         '',
         url(r'^', include(router.urls)),
+        url(r'^mark_all_read/$', views.mark_all_read),
     )
 except ImportError:
     pass
