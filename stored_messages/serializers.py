@@ -6,5 +6,5 @@ from .models import Inbox
 class InboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inbox
-        fields = ('message',)
+        fields = ('id', 'message',)
         depth = 1
