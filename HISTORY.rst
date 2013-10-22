@@ -3,6 +3,12 @@
 History
 -------
 
+0.2.0 (2013-10-22)
+++++++++++++++++++
+
+* Added `stored_messages_archive` template tag
+* Extended REST api
+
 0.1.2 (2013-10-13)
 ++++++++++++++++++
 
