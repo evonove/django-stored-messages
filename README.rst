@@ -99,3 +99,8 @@ TODO
 
 * Documentation
 * Broadcasting messages
+
+Examples
+--------
+
+[GitHub-like notifications with Stored Messages and AngularJS](http://dev.pippi.im/2013/10/22/build-github-like-notifications-with-django-messages-and-angular-js/)
