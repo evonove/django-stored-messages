@@ -33,8 +33,8 @@ Features
 Requirements
 ------------
 
- * Django 1.4/1.5/1.6
- * Python 2.7/3.3
+* Django 1.4/1.5/1.6
+* Python 2.7/3.3
 
 Documentation
 -------------
