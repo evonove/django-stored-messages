@@ -21,6 +21,21 @@ The app integrates smoothly with Django's `messages framework <http://docs.djang
 (`django.contrib.messages`), but users can decide which messages have to be stored on the database
 backend and kept available over sessions.
 
+Features
+--------
+
+* Seamless integration with `django.contrib.messages`
+* All the features are in a mixin you can attach to your existing storage
+* Stored messages are archived in the database
+* Users can configure which message levels have to be persisted
+* REST api to retrieve and mark messages as read (needs djangorestframework being installed)
+
+Requirements
+------------
+
+ * Django 1.4/1.5/1.6
+ * Python 2.7/3.3
+
 Documentation
 -------------
 
@@ -84,15 +99,6 @@ Iterating the messages will automatically mark them as read (but still persisted
 You can mark a stored message as read at any time::
 
     stored_messages.mark_read(request.user, message)
-
-Features
---------
-
-* Seamless integration with `django.contrib.messages`
-* All the features are in a mixin you can attach to your existing storage
-* Stored messages are archived in the database
-* Users can configure which message levels have to be persisted
-* REST api to retrieve and mark messages as read (needs djangorestframework being installed)
 
 TODO
 ----
