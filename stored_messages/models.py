@@ -8,8 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from .compat import AUTH_USER_MODEL
 from .settings import stored_messages_settings
 
-INBOX_EXPIRE_DAYS = 30  # TODO move to settings
-
 
 @python_2_unicode_compatible
 class Message(models.Model):
