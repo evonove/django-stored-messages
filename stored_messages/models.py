@@ -12,7 +12,8 @@ from .settings import stored_messages_settings
 @python_2_unicode_compatible
 class Message(models.Model):
     """
-    TODO: docstring
+    This model represents a message on the database. Fields are the same as in
+    `contrib.messages`
     """
     message = models.TextField()
     level = models.IntegerField()
@@ -26,7 +27,8 @@ class Message(models.Model):
 @python_2_unicode_compatible
 class MessageArchive(models.Model):
     """
-    TODO: docstring
+    This model holds all the messages users received. Corresponding
+    database table will grow indefinitely depending on messages traffic.
     """
     user = models.ForeignKey(AUTH_USER_MODEL)
     message = models.ForeignKey(Message)
@@ -38,7 +40,10 @@ class MessageArchive(models.Model):
 @python_2_unicode_compatible
 class Inbox(models.Model):
     """
-    TODO: docstring
+    Inbox messages are stored in this model until users read them. Once read,
+    inbox messages are deleted. Inbox messages have an expire time, after
+    that they could be removed by a proper django command. We do not expect
+    database table corresponding to this model to grow much.
     """
     user = models.ForeignKey(AUTH_USER_MODEL)
     message = models.ForeignKey(Message)
