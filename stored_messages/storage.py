@@ -6,7 +6,13 @@ from .settings import stored_messages_settings
 
 class StorageMixin(object):
     """
-    TODO: docstring
+    This mixin implements a message storage compliant with
+    `django.contrib.messages` which stores messages on the database when
+    needed, delegating to the sibling class otherwise. Messages are stored
+    only when the user is authenticated and the message level is configured
+    for being persisted. The mixin can be derived together with another class
+    implementing a storage, tipically one of the three provided by Django out
+    of the box.
     """
     def __init__(self, request, *args, **kwargs):
         self.user = request.user
@@ -54,8 +60,8 @@ class StorageMixin(object):
         """
         persistent messages are already in the database, so we can say they're
         already "stored"
-        Here we put them in the inbox, or remove from the inbox in case the messages were
-        iterated.
+        Here we put them in the inbox, or remove from the inbox in case the
+        messages were iterated.
 
         messages contains only new msgs if self.used==True
         else contains both new and unread messages
@@ -87,6 +93,9 @@ class StorageMixin(object):
 
 class PersistentStorage(StorageMixin, FallbackStorage):
     """
-    TODO: docstring
+    This class is provided for convenience: it implements `StorageMixin` which
+    persists messages having a type configured to be persisted and passes
+    other messages to `FallbackStorage`, one of the defaults provided by
+    Django which stores messages inside cookies or sessions.
     """
     pass
