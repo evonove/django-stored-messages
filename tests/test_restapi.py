@@ -48,3 +48,12 @@ class TestRESTApi(BaseTest):
         r = self.client.get(reverse('stored_messages:inbox-list'))
         messages = json.loads(r.content.decode('utf-8'))
         self.assertEqual(len(messages), 0)
+
+    def test_mark_all_read(self):
+        self.client.login(username='test_user', password='123456')
+        self.client.get('/create')
+        r = self.client.post(reverse('stored_messages:mark_all_read'))
+        self.assertEqual(r.status_code, 200)
+        r = self.client.get(reverse('stored_messages:inbox-list'))
+        messages = json.loads(r.content.decode('utf-8'))
+        self.assertEqual(len(messages), 0)
