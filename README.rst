@@ -100,11 +100,6 @@ You can mark a stored message as read at any time::
 
     stored_messages.mark_read(request.user, message)
 
-TODO
-----
-
-* Documentation
-* Broadcasting messages
 
 Examples
 --------
