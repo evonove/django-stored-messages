@@ -14,5 +14,5 @@ if 'rest_framework' in settings.INSTALLED_APPS:
     urlpatterns = patterns(
         '',
         url(r'^', include(router.urls)),
-        url(r'^mark_all_read/$', views.mark_all_read),
+        url(r'^mark_all_read/$', views.mark_all_read, name='mark_all_read'),
     )
