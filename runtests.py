@@ -4,6 +4,21 @@ from optparse import OptionParser
 try:
     from django.conf import settings
 
+    INSTALLED_APPS = [
+        "django.contrib.auth",
+        "django.contrib.contenttypes",
+        "django.contrib.sites",
+        "django.contrib.messages",
+        "django.contrib.sessions",
+        "stored_messages",
+    ]
+
+    try:
+        import rest_framework
+        INSTALLED_APPS.append("rest_framework")
+    except ImportError:
+        pass
+
     settings.configure(
         DEBUG=True,
         USE_TZ=True,
@@ -13,17 +28,9 @@ try:
             }
         },
         ROOT_URLCONF="stored_messages.urls",
-        INSTALLED_APPS=[
-            "django.contrib.auth",
-            "django.contrib.contenttypes",
-            "django.contrib.sites",
-            "django.contrib.messages",
-            "django.contrib.sessions",
-            "stored_messages",
-        ],
+        INSTALLED_APPS=INSTALLED_APPS,
         SITE_ID=1,
         NOSE_ARGS=['-s'],
-        #MESSAGE_STORAGE='django.contrib.messages.storage.fallback.FallbackStorage',
         MESSAGE_STORAGE='stored_messages.storage.PersistentStorage',
     )
 
