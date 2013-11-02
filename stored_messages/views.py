@@ -35,7 +35,7 @@ class InboxViewSet(viewsets.ReadOnlyModelViewSet):
 @api_view(['POST'])
 def mark_all_read(request):
     """
-    TODO
+    Mark all messages as read (i.e. delete from inbox) for current logged in user
     """
     Inbox.objects.filter(user=request.user).delete()
     return Response({"message": "All messages read"})
