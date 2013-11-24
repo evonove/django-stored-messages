@@ -81,7 +81,7 @@ def import_from_string(val, setting_name):
 
 class StoredMessagesSettings(object):
     """
-    A settings object, that allows OAuth2 Provider settings to be accessed as properties.
+    A settings object, that allows settings to be accessed as properties.
 
     Any setting with string import paths will be automatically resolved
     and return the class, rather than the string literal.
