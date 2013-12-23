@@ -4,7 +4,7 @@
 import os
 import sys
 
-version = '0.2.0'  # when changing this, please take a moment for doing the same in docs/conf.py
+version = '0.2.1'  # when changing this, please take a moment for doing the same in docs/conf.py
 
 try:
     from setuptools import setup
@@ -34,6 +34,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
+        'Django>=1.4',
     ],
     test_suite='runtests.run_tests',
     license="BSD",
