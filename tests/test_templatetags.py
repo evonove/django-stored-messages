@@ -31,6 +31,15 @@ class TestStoredMessagesTags(BaseTest):
         render = t.render(RequestContext(self.request))
         self.assertInHTML("<li>[test_user] unicode message ❤</li>", render, 15)
 
+    def test_stored_messages_count(self):
+        self._create_messages()
+
+        t = Template("{% load stored_messages_tags %}"
+                     "{% stored_messages_count as count %}"
+                     "<p>There are {{ count }} messages</p>")
+        render = t.render(RequestContext(self.request))
+        self.assertInHTML("<p>There are 20 messages</p>", render, 1)
+
     def test_stored_messages_list_empty_for_unauthenticated_user(self):
         stored_messages.add_message_for([self.user], stored_messages.INFO, "unicode message ❤")
 
