@@ -19,6 +19,9 @@ try:
     except ImportError:
         pass
 
+    import imp
+    imp.find_module('django_nose')
+
     settings.configure(
         DEBUG=True,
         USE_TZ=True,
