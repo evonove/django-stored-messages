@@ -5,7 +5,7 @@ __all__ = (
 )
 
 from .models import Message, MessageArchive, Inbox
-
+from stored_messages.compat import get_user_model
 
 def add_message_for(users, level, message, extra_tags='', fail_silently=False):
     """
@@ -27,8 +27,8 @@ def broadcast_message(level, message, extra_tags='', fail_silently=False):
     """
     Send a message to all users in the system. TODO.
     """
-    # TODO
-    raise NotImplementedError
+    users = get_user_model().objects.all()
+    add_message_for(users, level, message, extra_tags=extra_tags, fail_silently=fail_silently)
 
 
 def mark_read(user, message):

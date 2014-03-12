@@ -40,9 +40,22 @@ class TestApi(BaseTest):
                          "Multiple errors")
 
     def test_broadcast_message(self):
-        self.assertRaises(NotImplementedError,
-                          broadcast_message,
-                          stored_messages.STORED_INFO, 'one ☢ for all')
+        user1 = get_user_model().objects.create_user("user1", "u1@user.com", "123456")
+        user2 = get_user_model().objects.create_user("user2", "u2@user.com", "123456")
+        user3 = get_user_model().objects.create_user("user3", "u3@user.com", "123456")
+
+        broadcast_message( stored_messages.STORED_INFO, 'broadcast test message')
+        self.assertEqual(Inbox.objects.get(user=user1.id).message.message, "broadcast test message")
+        self.assertEqual(Inbox.objects.get(user=user2.id).message.message, "broadcast test message")
+        self.assertEqual(Inbox.objects.get(user=user3.id).message.message, "broadcast test message")
+
+        self.assertEqual(MessageArchive.objects.get(user=user1.id).message.message,
+                         "broadcast test message")
+        self.assertEqual(MessageArchive.objects.get(user=user2.id).message.message,
+                         "broadcast test message")
+        self.assertEqual(MessageArchive.objects.get(user=user3.id).message.message,
+                         "broadcast test message")
+
 
     def test_mark_all_read(self):
         for i in range(20):
