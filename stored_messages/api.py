@@ -25,7 +25,12 @@ def add_message_for(users, level, message, extra_tags='', fail_silently=False):
 
 def broadcast_message(level, message, extra_tags='', fail_silently=False):
     """
-    Send a message to all users in the system.
+    Send a message to all users aka broadcast.
+
+    :param level: message level
+    :param message: the string containing the message
+    :param extra_tags: like the Django api, a string containing extra tags for the message
+    :param fail_silently: not used at the moment
     """
     users = get_user_model().objects.all()
     add_message_for(users, level, message, extra_tags=extra_tags, fail_silently=fail_silently)
