@@ -56,7 +56,6 @@ class TestApi(BaseTest):
         self.assertEqual(MessageArchive.objects.get(user=user3.id).message.message,
                          "broadcast test message")
 
-
     def test_mark_all_read(self):
         for i in range(20):
             stored_messages.add_message_for([self.user], stored_messages.INFO, "unicode message ❤")

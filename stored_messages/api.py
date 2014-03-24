@@ -7,6 +7,7 @@ __all__ = (
 from .models import Message, MessageArchive, Inbox
 from stored_messages.compat import get_user_model
 
+
 def add_message_for(users, level, message, extra_tags='', fail_silently=False):
     """
     Send a message to a list of users without passing through `django.contrib.messages`
