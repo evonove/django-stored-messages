@@ -3,6 +3,9 @@ from django.contrib.messages.storage.fallback import FallbackStorage
 from .models import Inbox, Message, MessageArchive
 from .settings import stored_messages_settings
 
+BackendClass = stored_messages_settings.STORAGE_BACKEND
+backend = BackendClass()
+
 
 class StorageMixin(object):
     """
@@ -25,7 +28,7 @@ class StorageMixin(object):
         """
         messages, all_retrieved = super(StorageMixin, self)._get(*args, **kwargs)
         if self.user.is_authenticated():
-            inbox_messages = Inbox.objects.filter(user=self.user).select_related("message")
+            inbox_messages = backend.get_inbox(self.user)
         else:
             inbox_messages = []
         return messages + [im.message for im in inbox_messages], all_retrieved
