@@ -39,6 +39,7 @@ DEFAULTS = {
         STORED_ERROR: 'stored error',
     }),
     'INBOX_EXPIRE_DAYS': 30,
+    'STORAGE_BACKEND': 'backends.django_orm.backend',
 }
 
 # List of settings that cannot be empty
