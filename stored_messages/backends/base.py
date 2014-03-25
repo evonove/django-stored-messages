@@ -27,6 +27,12 @@ class StoredMessagesBackend(object):
         """
         raise NotImplementedError
 
+    def archive_list(self, user):
+        """
+        Retrieve all the messages in `user`'s archive
+        """
+        raise NotImplementedError
+
     def can_handle(self, msg_instance):
         """
         Determine if this backend can handle message of type `msg_instance`

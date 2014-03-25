@@ -7,7 +7,7 @@ class DjangoOrmBackend(StoredMessagesBackend):
 
     """
     def inbox_list(self, user):
-        return Inbox.objects.filter(user=user).select_related("message")
+        return list(Inbox.objects.filter(user=user).select_related("message"))
 
     def inbox_purge(self, user):
         Inbox.objects.filter(user=user).delete()
@@ -20,6 +20,9 @@ class DjangoOrmBackend(StoredMessagesBackend):
         m_instance = Message.objects.create(message=message, level=level, tags=extra_tags)
         MessageArchive.objects.create(user=user, message=m_instance)
         return m_instance
+
+    def archive_list(self, user):
+        return list(MessageArchive.objects.filter(user=user))
 
     def can_handle(self, message):
         return isinstance(message, Message)
