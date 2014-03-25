@@ -2,7 +2,7 @@ from ..base import StoredMessagesBackend
 from ...models import Inbox, Message, MessageArchive
 
 
-class DjangoOrmBackend(StoredMessagesBackend):
+class DefaultBackend(StoredMessagesBackend):
     """
 
     """

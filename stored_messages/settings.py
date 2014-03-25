@@ -39,7 +39,7 @@ DEFAULTS = {
         STORED_ERROR: 'stored error',
     }),
     'INBOX_EXPIRE_DAYS': 30,
-    'STORAGE_BACKEND': 'stored_messages.backends.DjangoOrmBackend',
+    'STORAGE_BACKEND': 'stored_messages.backends.DefaultBackend',
     # Only for Redis backend
     'REDIS_HOST': 'localhost',
     'REDIS_PORT': 6379,
