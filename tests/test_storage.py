@@ -4,8 +4,10 @@ from . import BaseTest
 
 from django.contrib.messages.storage import default_storage
 
-from stored_messages.models import Inbox, MessageArchive
 from stored_messages import add_message, get_messages, STORED_ERROR, DEBUG, ERROR
+from stored_messages.settings import stored_messages_settings
+
+BackendClass = stored_messages_settings.STORAGE_BACKEND
 
 import mock
 
@@ -17,24 +19,27 @@ class TestStorage(BaseTest):
         add_message(self.request, STORED_ERROR, "an SOS to the world ☢")
         add_message(self.request, DEBUG, "this won't be persisted ☢")
         storage = get_messages(self.request)
+        backend = BackendClass()
         self.assertEqual(len(storage), 2)
-        self.assertEqual(MessageArchive.objects.filter(user=self.user).count(), 1)
+        self.assertEqual(len(backend.archive_list(self.user)), 1)
 
     def test_store_with_middleware(self):
         self.client.login(username='test_user', password='123456')
         self.client.get('/create')
-        inbox_msg = Inbox.objects.filter(user=self.user).count()
+        backend = BackendClass()
+        inbox_msg = len(backend.inbox_list(self.user))
         self.assertEqual(inbox_msg, 1)
         self.client.get('/consume')
-        self.assertEqual(Inbox.objects.filter(user=self.user).count(), 0)
-        self.assertEqual(MessageArchive.objects.filter(user=self.user).count(), 1)
+        self.assertEqual(len(backend.inbox_list(self.user)), 0)
+        self.assertEqual(len(backend.archive_list(self.user)), 1)
 
     def test_store_keep_unread(self):
         self.client.login(username='test_user', password='123456')
         self.client.get('/create')
         self.client.get('/consume', data={'keep_storage': True})
-        self.assertEqual(Inbox.objects.filter(user=self.user).count(), 1)
-        self.assertEqual(MessageArchive.objects.filter(user=self.user).count(), 1)
+        backend = BackendClass()
+        self.assertEqual(len(backend.inbox_list(self.user)), 1)
+        self.assertEqual(len(backend.archive_list(self.user)), 1)
 
     def test_store_anonymous(self):
         self.request.user = mock.MagicMock(wraps=self.user)
@@ -55,4 +60,5 @@ class TestStorage(BaseTest):
         self.client.login(username='test_user', password='123456')
         self.client.get('/create_mixed')
         self.client.get('/consume')
-        self.assertEqual(Inbox.objects.filter(user=self.user).count(), 0)
+        backend = BackendClass()
+        self.assertEqual(len(backend.inbox_list(self.user)), 0)
