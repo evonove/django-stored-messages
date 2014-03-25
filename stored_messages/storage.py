@@ -1,6 +1,5 @@
 from django.contrib.messages.storage.fallback import FallbackStorage
 
-from .models import Inbox, Message, MessageArchive
 from .settings import stored_messages_settings
 
 BackendClass = stored_messages_settings.STORAGE_BACKEND
@@ -28,7 +27,7 @@ class StorageMixin(object):
         """
         messages, all_retrieved = super(StorageMixin, self)._get(*args, **kwargs)
         if self.user.is_authenticated():
-            inbox_messages = backend.get_inbox(self.user)
+            inbox_messages = backend.inbox_list(self.user)
         else:
             inbox_messages = []
         return messages + [im.message for im in inbox_messages], all_retrieved
@@ -55,8 +54,7 @@ class StorageMixin(object):
             return super(StorageMixin, self).add(level, message, extra_tags)
 
         self.added_new = True
-        m = Message.objects.create(message=message, level=level, tags=extra_tags)
-        MessageArchive.objects.create(user=self.user, message=m)
+        m = backend.create_message(self.user, message, level, extra_tags)
         self._queued_messages.append(m)
 
     def _store(self, messages, response, *args, **kwargs):
@@ -73,12 +71,11 @@ class StorageMixin(object):
         if self.user.is_authenticated():
             if not messages:
                 # erase inbox
-                Inbox.objects.filter(user=self.user).delete()
+                backend.inbox_purge(self.user)
             else:
                 for m in messages:
-                    if isinstance(m, Message):
-                        # create inbox for the message if does not already exists
-                        Inbox.objects.get_or_create(user=self.user, message=m)
+                    if backend.can_handle(m):
+                        backend.inbox_get_or_create(self.user, m)
                     else:
                         contrib_messages.append(m)
 
@@ -90,7 +87,7 @@ class StorageMixin(object):
         but avoid to do this for `models.Message` instances.
         """
         for message in messages:
-            if not isinstance(message, Message):
+            if not backend.can_handle(message):
                 message._prepare()
 
 
