@@ -14,7 +14,7 @@ class DefaultBackend(StoredMessagesBackend):
         Inbox.objects.filter(user=user).delete()
 
     def inbox_store(self, users, msg_instance):
-        if not isinstance(msg_instance, Message):
+        if not self.can_handle(msg_instance):
             raise MessageTypeNotSupported()
 
         for user in users:
@@ -25,7 +25,7 @@ class DefaultBackend(StoredMessagesBackend):
         return m_instance
 
     def archive_store(self, users, msg_instance):
-        if not isinstance(msg_instance, Message):
+        if not self.can_handle(msg_instance):
             raise MessageTypeNotSupported()
 
         for user in users:
