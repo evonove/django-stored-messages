@@ -15,15 +15,23 @@ class StoredMessagesBackend(object):
         """
         raise NotImplementedError
 
-    def inbox_get_or_create(self, user, msg_text):
+    def inbox_store(self, users, msg_instance):
         """
-        Create or retrieve an `user`'s Inbox entry containing `msg_text`
+        Store a message instance in the inbox for a list
+        of users
         """
         raise NotImplementedError
 
     def create_message(self, user, level, msg_text, extra_tags):
         """
-        Create a Message instance
+        Create and return a Message instance
+        """
+        raise NotImplementedError
+
+    def archive_store(self, users, msg_instance):
+        """
+        Store a message instance in the archive for a list
+        of users
         """
         raise NotImplementedError
 
@@ -35,6 +43,7 @@ class StoredMessagesBackend(object):
 
     def can_handle(self, msg_instance):
         """
-        Determine if this backend can handle message of type `msg_instance`
+        Determine if this backend can handle messages
+        of type `msg_instance`
         """
         raise NotImplementedError

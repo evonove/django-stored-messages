@@ -55,12 +55,13 @@ class StorageMixin(object):
 
         self.added_new = True
         m = backend.create_message(self.user, level, message, extra_tags)
+        backend.archive_store([self.user], m)
         self._queued_messages.append(m)
 
     def _store(self, messages, response, *args, **kwargs):
         """
-        persistent messages are already in the database, so we can say they're
-        already "stored"
+        persistent messages are already in the database inside the 'archive',
+        so we can say they're already "stored".
         Here we put them in the inbox, or remove from the inbox in case the
         messages were iterated.
 
@@ -75,7 +76,7 @@ class StorageMixin(object):
             else:
                 for m in messages:
                     if backend.can_handle(m):
-                        backend.inbox_get_or_create(self.user, m)
+                        backend.inbox_store([self.user], m)
                     else:
                         contrib_messages.append(m)
 
