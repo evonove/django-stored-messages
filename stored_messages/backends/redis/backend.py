@@ -27,6 +27,12 @@ class RedisBackend(StoredMessagesBackend):
         for user in users:
             self.client.sadd('user:%d:notifications' % user.pk, msg_instance)
 
+    def inbox_delete(self, user, msg_instance):
+        if not self.can_handle(msg_instance):
+            raise MessageTypeNotSupported()
+
+        return self.client.srem('user:%d:notifications' % user.pk, msg_instance)
+
     def create_message(self, msg_text, level, extra_tags):
         m = {'message': msg_text, 'level': level, 'tags': extra_tags}
         return m

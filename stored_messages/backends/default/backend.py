@@ -1,5 +1,5 @@
 from ..base import StoredMessagesBackend
-from ..exceptions import MessageTypeNotSupported
+from ..exceptions import MessageTypeNotSupported, InboxDoesNotExist
 from ...models import Inbox, Message, MessageArchive
 
 
@@ -19,6 +19,13 @@ class DefaultBackend(StoredMessagesBackend):
 
         for user in users:
             Inbox.objects.get_or_create(user=user, message=msg_instance)
+
+    def inbox_delete(self, user, msg_instance):
+        try:
+            inbox_m = Inbox.objects.filter(user=user, message=msg_instance).get()
+            inbox_m.delete()
+        except Inbox.DoesNotExist:
+            raise InboxDoesNotExist()
 
     def create_message(self, level, msg_text, extra_tags):
         m_instance = Message.objects.create(message=msg_text, level=level, tags=extra_tags)

@@ -4,7 +4,6 @@ __all__ = (
     'mark_read', 'mark_all_read',
 )
 
-from .models import Message, MessageArchive, Inbox
 from stored_messages.compat import get_user_model
 from .settings import stored_messages_settings
 BackendClass = stored_messages_settings.STORAGE_BACKEND
@@ -26,17 +25,17 @@ def add_message_for(users, level, message_text, extra_tags='', fail_silently=Fal
     backend.inbox_store(users, m)
 
 
-def broadcast_message(level, message, extra_tags='', fail_silently=False):
+def broadcast_message(level, message_text, extra_tags='', fail_silently=False):
     """
     Send a message to all users aka broadcast.
 
     :param level: message level
-    :param message: the string containing the message
+    :param message_text: the string containing the message
     :param extra_tags: like the Django api, a string containing extra tags for the message
     :param fail_silently: not used at the moment
     """
     users = get_user_model().objects.all()
-    add_message_for(users, level, message, extra_tags=extra_tags, fail_silently=fail_silently)
+    add_message_for(users, level, message_text, extra_tags=extra_tags, fail_silently=fail_silently)
 
 
 def mark_read(user, message):
@@ -48,13 +47,7 @@ def mark_read(user, message):
     :param user: user instance for the recipient
     :param message: a Message instance to mark as read
     """
-    from .models import Inbox
-    try:
-        inbox_m = Inbox.objects.filter(user=user, message=message).get()
-        inbox_m.delete()
-        return True
-    except Inbox.DoesNotExist:
-        return False
+    backend.inbox_delete(user, message)
 
 
 def mark_all_read(user):
@@ -63,5 +56,4 @@ def mark_all_read(user):
 
     :param user: user instance for the recipient
     """
-    from .models import Inbox
-    Inbox.objects.filter(user=user).delete()
+    backend.inbox_purge(user)
