@@ -6,6 +6,9 @@ __all__ = (
 
 from .models import Message, MessageArchive, Inbox
 from stored_messages.compat import get_user_model
+from .settings import stored_messages_settings
+BackendClass = stored_messages_settings.STORAGE_BACKEND
+backend = BackendClass()
 
 
 def add_message_for(users, level, message, extra_tags='', fail_silently=False):

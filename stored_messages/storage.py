@@ -54,7 +54,7 @@ class StorageMixin(object):
             return super(StorageMixin, self).add(level, message, extra_tags)
 
         self.added_new = True
-        m = backend.create_message(self.user, message, level, extra_tags)
+        m = backend.create_message(self.user, level, message, extra_tags)
         self._queued_messages.append(m)
 
     def _store(self, messages, response, *args, **kwargs):

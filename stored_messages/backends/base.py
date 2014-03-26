@@ -21,7 +21,7 @@ class StoredMessagesBackend(object):
         """
         raise NotImplementedError
 
-    def create_message(self, user, msg_text, level, extra_tags):
+    def create_message(self, user, level, msg_text, extra_tags):
         """
         Create a Message instance
         """
