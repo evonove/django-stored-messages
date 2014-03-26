@@ -4,8 +4,8 @@ from . import BaseTest
 
 from stored_messages import mark_read, add_message_for, broadcast_message, mark_all_read
 from stored_messages.models import Inbox, MessageArchive
-
 from stored_messages.compat import get_user_model
+from stored_messages.backends.exceptions import InboxDoesNotExist
 import stored_messages
 
 
@@ -22,8 +22,8 @@ class TestApi(BaseTest):
         self.client.login(username='test_user', password='123456')
         self.client.get('/create')
         msg = MessageArchive.objects.filter(user=self.user).get()
-        self.assertTrue(mark_read(self.user, msg))
-        self.assertFalse(mark_read(self.user, msg))
+        mark_read(self.user, msg)
+        self.assertRaises(InboxDoesNotExist, mark_read, self.user, msg)
 
     def test_add_message_for(self):
         user2 = get_user_model().objects.create_user("another_user", "u@user.com", "123456")

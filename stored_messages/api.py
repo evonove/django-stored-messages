@@ -11,20 +11,19 @@ BackendClass = stored_messages_settings.STORAGE_BACKEND
 backend = BackendClass()
 
 
-def add_message_for(users, level, message, extra_tags='', fail_silently=False):
+def add_message_for(users, level, message_text, extra_tags='', fail_silently=False):
     """
     Send a message to a list of users without passing through `django.contrib.messages`
 
     :param users: an iterable containing the recipients of the messages
     :param level: message level
-    :param message: the string containing the message
+    :param message_text: the string containing the message
     :param extra_tags: like the Django api, a string containing extra tags for the message
     :param fail_silently: not used at the moment
     """
-    m = Message.objects.create(message=message, level=level, tags=extra_tags)
-    for u in users:
-        MessageArchive.objects.create(user=u, message=m)
-        Inbox.objects.create(user=u, message=m)
+    m = backend.create_message(level, message_text, extra_tags)
+    backend.archive_store(users, m)
+    backend.inbox_store(users, m)
 
 
 def broadcast_message(level, message, extra_tags='', fail_silently=False):
