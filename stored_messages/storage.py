@@ -3,7 +3,6 @@ from django.contrib.messages.storage.fallback import FallbackStorage
 from .settings import stored_messages_settings
 
 BackendClass = stored_messages_settings.STORAGE_BACKEND
-backend = BackendClass()
 
 
 class StorageMixin(object):
@@ -18,6 +17,7 @@ class StorageMixin(object):
     """
     def __init__(self, request, *args, **kwargs):
         self.user = request.user
+        self.backend = BackendClass()
         super(StorageMixin, self).__init__(request, *args, **kwargs)
 
     def _get(self, *args, **kwargs):
@@ -27,7 +27,7 @@ class StorageMixin(object):
         """
         messages, all_retrieved = super(StorageMixin, self)._get(*args, **kwargs)
         if self.user.is_authenticated():
-            inbox_messages = backend.inbox_list(self.user)
+            inbox_messages = self.backend.inbox_list(self.user)
         else:
             inbox_messages = []
         return messages + [im.message for im in inbox_messages], all_retrieved
@@ -54,8 +54,8 @@ class StorageMixin(object):
             return super(StorageMixin, self).add(level, message, extra_tags)
 
         self.added_new = True
-        m = backend.create_message(self.user, level, message, extra_tags)
-        backend.archive_store([self.user], m)
+        m = self.backend.create_message(self.user, level, message, extra_tags)
+        self.backend.archive_store([self.user], m)
         self._queued_messages.append(m)
 
     def _store(self, messages, response, *args, **kwargs):
@@ -72,11 +72,11 @@ class StorageMixin(object):
         if self.user.is_authenticated():
             if not messages:
                 # erase inbox
-                backend.inbox_purge(self.user)
+                self.backend.inbox_purge(self.user)
             else:
                 for m in messages:
-                    if backend.can_handle(m):
-                        backend.inbox_store([self.user], m)
+                    if self.backend.can_handle(m):
+                        self.backend.inbox_store([self.user], m)
                     else:
                         contrib_messages.append(m)
 
@@ -88,7 +88,7 @@ class StorageMixin(object):
         but avoid to do this for `models.Message` instances.
         """
         for message in messages:
-            if not backend.can_handle(message):
+            if not self.backend.can_handle(message):
                 message._prepare()
 
 
