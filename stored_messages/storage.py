@@ -1,6 +1,7 @@
 from django.contrib.messages.storage.fallback import FallbackStorage
 
 from .settings import stored_messages_settings
+from .backends.exceptions import MessageTypeNotSupported
 
 BackendClass = stored_messages_settings.STORAGE_BACKEND
 
@@ -75,9 +76,9 @@ class StorageMixin(object):
                 self.backend.inbox_purge(self.user)
             else:
                 for m in messages:
-                    if self.backend.can_handle(m):
+                    try:
                         self.backend.inbox_store([self.user], m)
-                    else:
+                    except MessageTypeNotSupported:
                         contrib_messages.append(m)
 
         super(StorageMixin, self)._store(contrib_messages, response, *args, **kwargs)
