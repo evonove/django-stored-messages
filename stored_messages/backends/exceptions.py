@@ -1,0 +1,3 @@
+
+class MessageTypeNotSupported(Exception):
+    pass
