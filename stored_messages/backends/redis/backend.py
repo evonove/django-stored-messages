@@ -27,9 +27,8 @@ class RedisBackend(StoredMessagesBackend):
         for user in users:
             self.client.sadd('user:%d:notifications' % user.pk, msg_instance)
 
-    def create_message(self, user, msg_text, level, extra_tags):
+    def create_message(self, msg_text, level, extra_tags):
         m = {'message': msg_text, 'level': level, 'tags': extra_tags}
-
         return m
 
     def archive_store(self, users, msg_instance):

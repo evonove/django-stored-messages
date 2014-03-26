@@ -20,7 +20,7 @@ class DefaultBackend(StoredMessagesBackend):
         for user in users:
             Inbox.objects.get_or_create(user=user, message=msg_instance)
 
-    def create_message(self, user, level, msg_text, extra_tags):
+    def create_message(self, level, msg_text, extra_tags):
         m_instance = Message.objects.create(message=msg_text, level=level, tags=extra_tags)
         return m_instance
 

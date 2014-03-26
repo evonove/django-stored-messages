@@ -22,7 +22,7 @@ class StoredMessagesBackend(object):
         """
         raise NotImplementedError
 
-    def create_message(self, user, level, msg_text, extra_tags):
+    def create_message(self, level, msg_text, extra_tags):
         """
         Create and return a Message instance
         """
