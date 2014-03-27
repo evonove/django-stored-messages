@@ -1,4 +1,6 @@
-from django.utils import timezone
+from __future__ import unicode_literals
+
+from django.utils import timezone, six
 from django.core.serializers.json import DjangoJSONEncoder
 
 import redis
@@ -28,7 +30,7 @@ class RedisBackend(StoredMessagesBackend):
     def _list(self, key_tpl, user):
         ret = []
         for msg_json in self.client.lrange(key_tpl % user.pk, 0, -1):
-            m = json.loads(msg_json)
+            m = json.loads(msg_json.decode('utf-8'))
             ret.append(m)
         return ret
 
