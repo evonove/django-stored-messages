@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django.utils import timezone, six
 from django.core.serializers.json import DjangoJSONEncoder
 
-import redis
 import json
 
 from ..exceptions import MessageTypeNotSupported
@@ -16,6 +15,7 @@ class RedisBackend(StoredMessagesBackend):
 
     """
     def __init__(self):
+        import redis
         self.client = redis.StrictRedis(host=stored_messages_settings.REDIS_HOST,
                                         port=stored_messages_settings.REDIS_PORT,
                                         db=stored_messages_settings.REDIS_DB)
