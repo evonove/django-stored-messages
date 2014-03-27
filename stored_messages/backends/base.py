@@ -3,6 +3,12 @@ class StoredMessagesBackend(object):
     """
 
     """
+    def create_message(self, level, msg_text, extra_tags):
+        """
+        Create and return a Message instance
+        """
+        raise NotImplementedError
+
     def inbox_list(self, user):
         """
         Retrieve all the messages in `user`'s Inbox
@@ -25,12 +31,6 @@ class StoredMessagesBackend(object):
     def inbox_delete(self, user, msg_instance):
         """
         Remove a message instance from `user`'s inbox
-        """
-        raise NotImplementedError
-
-    def create_message(self, level, msg_text, extra_tags):
-        """
-        Create and return a Message instance
         """
         raise NotImplementedError
 
