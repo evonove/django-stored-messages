@@ -2,15 +2,50 @@ from . import BaseTest
 
 import json
 import unittest
+import mock
+
+from django.conf import settings
+from django.core.cache import cache
 
 from stored_messages.backends.exceptions import MessageTypeNotSupported
 from stored_messages.backends.redis import RedisBackend
 from stored_messages import STORED_ERROR
 from stored_messages.settings import stored_messages_settings
 
+
+class RedisMock(object):
+    """
+    Mock the Redis server instance with Django in-memory cache
+    """
+    def rpush(self, key, data):
+        l = cache.get(key)
+        if l is None:
+            l = []
+        l.append(data)
+        cache.set(key, l)
+
+    def lrange(self, key, *args, **kwargs):
+        return cache.get(key) or []
+
+    def delete(self, key):
+        cache.delete(key)
+
+    def lrem(self, key, count, data):
+        l = cache.get(key)
+        l.remove(data)
+        cache.set(key, l)
+
+    def StrictRedis(self, *args, **kwargs):
+        return self
+
 try:
-    import redis
+    from stored_messages.backends.redis.backend import redis
     REDISPY_MISSING = False
+
+    if getattr(settings, 'MOCK_REDIS_SERVER', True):
+        patcher = mock.patch('stored_messages.backends.redis.backend.redis', new_callable=RedisMock)
+        redis = patcher.start()
+
 except ImportError:
     REDISPY_MISSING = True
 
@@ -18,8 +53,6 @@ except ImportError:
 @unittest.skipIf(REDISPY_MISSING, "redis-py not installed")
 class TestRedisBackend(BaseTest):
     def setUp(self):
-        import redis
-
         super(TestRedisBackend, self).setUp()
         self.client = redis.StrictRedis(host=stored_messages_settings.REDIS_HOST,
                                         port=stored_messages_settings.REDIS_PORT,
