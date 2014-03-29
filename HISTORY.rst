@@ -3,6 +3,10 @@
 History
 -------
 
+0.2.1 (2013-12-23)
+++++++++++++++++++
+* Added `stored_messages_count` template tag and tests
+
 0.2.0 (2013-10-22)
 ++++++++++++++++++
 
