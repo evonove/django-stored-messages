@@ -35,6 +35,7 @@ try:
         SITE_ID=1,
         NOSE_ARGS=['-s'],
         MESSAGE_STORAGE='stored_messages.storage.PersistentStorage',
+        MOCK_REDIS_SERVER=True,
     )
 
     from django_nose import NoseTestSuiteRunner
