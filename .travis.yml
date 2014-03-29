@@ -7,8 +7,8 @@ env:
   - TOX_ENV=py27-django14
   - TOX_ENV=py27-django15
   - TOX_ENV=py27-django16
-  - TOX_ENV=py34-django15
-  - TOX_ENV=py34-django16
+  - TOX_ENV=py33-django15
+  - TOX_ENV=py33-django16
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
