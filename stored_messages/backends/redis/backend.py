@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django.utils import timezone, six
+from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
 
 import json
