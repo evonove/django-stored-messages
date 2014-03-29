@@ -9,13 +9,17 @@ from ..exceptions import MessageTypeNotSupported
 from ..base import StoredMessagesBackend
 from ...settings import stored_messages_settings
 
+try:
+    import redis
+except ImportError:
+    pass
+
 
 class RedisBackend(StoredMessagesBackend):
     """
 
     """
     def __init__(self):
-        import redis
         self.client = redis.StrictRedis(host=stored_messages_settings.REDIS_HOST,
                                         port=stored_messages_settings.REDIS_PORT,
                                         db=stored_messages_settings.REDIS_DB)
@@ -73,3 +77,4 @@ class RedisBackend(StoredMessagesBackend):
     def can_handle(self, msg_instance):
         return (isinstance(msg_instance, dict) and
                 set(msg_instance.keys()) == {'message', 'level', 'tags', 'date'})
+
