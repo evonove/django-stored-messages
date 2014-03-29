@@ -6,6 +6,7 @@ import mock
 
 from django.conf import settings
 from django.core.cache import cache
+from django.utils.encoding import force_text
 
 from stored_messages.backends.exceptions import MessageTypeNotSupported
 from stored_messages.backends.redis import RedisBackend
@@ -81,7 +82,7 @@ class TestRedisBackend(BaseTest):
     def test_inbox_store(self):
         self.backend.inbox_store([self.user], self.message)
         data = self.client.lrange('user:%d:notifications' % self.user.pk, 0, -1).pop()
-        self.assertTrue(self._same_message(json.loads(data.decode('utf-8')), self.message))
+        self.assertTrue(self._same_message(json.loads(force_text(data)), self.message))
         self.assertRaises(MessageTypeNotSupported, self.backend.inbox_store, [], {})
 
     def test_inbox_list(self):
@@ -108,7 +109,7 @@ class TestRedisBackend(BaseTest):
     def test_archive_store(self):
         self.backend.archive_store([self.user], self.message)
         data = self.client.lrange('user:%d:archive' % self.user.pk, 0, -1).pop()
-        self.assertTrue(self._same_message(json.loads(data.decode('utf-8')), self.message))
+        self.assertTrue(self._same_message(json.loads(force_text(data)), self.message))
         self.assertRaises(MessageTypeNotSupported, self.backend.archive_store, [], {})
 
     def test_archive_list(self):
