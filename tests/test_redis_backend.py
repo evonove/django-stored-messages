@@ -8,8 +8,14 @@ from stored_messages.backends.redis import RedisBackend
 from stored_messages import STORED_ERROR
 from stored_messages.settings import stored_messages_settings
 
+try:
+    import redis
+    REDISPY_MISSING = False
+except ImportError:
+    REDISPY_MISSING = True
 
-@unittest.skip("TODO: skip if redis is not installed or mock")
+
+@unittest.skipIf(REDISPY_MISSING, "redis-py not installed")
 class TestRedisBackend(BaseTest):
     def setUp(self):
         import redis
