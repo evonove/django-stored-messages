@@ -20,6 +20,7 @@ Contents:
    installation
    usage
    advanced_usage
+   backends
    contributing
    authors
    history
