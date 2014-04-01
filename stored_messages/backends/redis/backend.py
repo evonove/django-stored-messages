@@ -5,6 +5,7 @@ from django.utils.encoding import force_text
 from django.core.serializers.json import DjangoJSONEncoder
 
 import json
+from collections import namedtuple
 
 from ..exceptions import MessageTypeNotSupported
 from ..base import StoredMessagesBackend
@@ -14,6 +15,9 @@ try:
     import redis
 except ImportError:
     pass
+
+
+Message = namedtuple('Message', ['message', 'level', 'tags', 'date'])
 
 
 class RedisBackend(StoredMessagesBackend):
@@ -33,7 +37,7 @@ class RedisBackend(StoredMessagesBackend):
     def _list(self, key_tpl, user):
         ret = []
         for msg_json in self.client.lrange(key_tpl % user.pk, 0, -1):
-            m = json.loads(force_text(msg_json))
+            m = Message(*json.loads(force_text(msg_json)))
             ret.append(m)
         return ret
 
@@ -49,8 +53,7 @@ class RedisBackend(StoredMessagesBackend):
         if r.endswith('+00:00'):
             r = r[:-6] + 'Z'
 
-        m = {'message': msg_text, 'level': level, 'tags': extra_tags, 'date': r}
-        return m
+        return Message(message=msg_text, level=level, tags=extra_tags, date=r)
 
     def inbox_list(self, user):
         return self._list('user:%d:notifications', user)
@@ -74,6 +77,4 @@ class RedisBackend(StoredMessagesBackend):
         return self._list('user:%d:archive', user)
 
     def can_handle(self, msg_instance):
-        return (isinstance(msg_instance, dict) and
-                set(msg_instance.keys()) == {'message', 'level', 'tags', 'date'})
-
+        return isinstance(msg_instance, Message)

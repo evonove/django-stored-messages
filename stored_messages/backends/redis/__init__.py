@@ -1,1 +1,1 @@
-from .backend import RedisBackend
+from .backend import RedisBackend, Message
