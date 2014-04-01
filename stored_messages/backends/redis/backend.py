@@ -21,9 +21,7 @@ class RedisBackend(StoredMessagesBackend):
 
     """
     def __init__(self):
-        self.client = redis.StrictRedis(host=stored_messages_settings.REDIS_HOST,
-                                        port=stored_messages_settings.REDIS_PORT,
-                                        db=stored_messages_settings.REDIS_DB)
+        self.client = redis.StrictRedis.from_url(stored_messages_settings.REDIS_URL)
 
     def _store(self, key_tpl, users, msg_instance):
         if not self.can_handle(msg_instance):

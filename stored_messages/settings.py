@@ -41,9 +41,7 @@ DEFAULTS = {
     'INBOX_EXPIRE_DAYS': 30,
     'STORAGE_BACKEND': 'stored_messages.backends.DefaultBackend',
     # Only for Redis backend
-    'REDIS_HOST': 'localhost',
-    'REDIS_PORT': 6379,
-    'REDIS_DB': 0,
+    'REDIS_URL': 'redis://username:password@localhost:6379/0',
 }
 
 # List of settings that cannot be empty
