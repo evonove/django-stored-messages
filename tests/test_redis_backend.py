@@ -11,7 +11,6 @@ from django.utils.encoding import force_text
 from stored_messages.backends.exceptions import MessageTypeNotSupported
 from stored_messages.backends.redis import RedisBackend
 from stored_messages import STORED_ERROR
-from stored_messages.settings import stored_messages_settings
 
 
 class RedisMock(object):
@@ -36,16 +35,22 @@ class RedisMock(object):
         l.remove(data)
         cache.set(key, l)
 
+    @staticmethod
+    def from_url(*args, **kwargs):
+        return RedisMock()
+
     def StrictRedis(self, *args, **kwargs):
         return self
+
 
 try:
     from stored_messages.backends.redis.backend import redis
     REDISPY_MISSING = False
 
     if getattr(settings, 'MOCK_REDIS_SERVER', True):
-        patcher = mock.patch('stored_messages.backends.redis.backend.redis', new_callable=RedisMock)
+        patcher = mock.patch('stored_messages.backends.redis.backend.redis')
         redis = patcher.start()
+        redis.StrictRedis = RedisMock
 
 except ImportError:
     REDISPY_MISSING = True
@@ -55,9 +60,7 @@ except ImportError:
 class TestRedisBackend(BaseTest):
     def setUp(self):
         super(TestRedisBackend, self).setUp()
-        self.client = redis.StrictRedis(host=stored_messages_settings.REDIS_HOST,
-                                        port=stored_messages_settings.REDIS_PORT,
-                                        db=stored_messages_settings.REDIS_DB)
+        self.client = redis.StrictRedis.from_url(settings.STORED_MESSAGES['REDIS_URL'])
         self.backend = RedisBackend()
         self.message = self.backend.create_message('A message for you', STORED_ERROR)
 

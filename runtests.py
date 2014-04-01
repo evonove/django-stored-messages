@@ -35,6 +35,9 @@ try:
         SITE_ID=1,
         NOSE_ARGS=['-s'],
         MESSAGE_STORAGE='stored_messages.storage.PersistentStorage',
+        STORED_MESSAGES={
+            'REDIS_URL': 'redis://localhost:6379/0',
+        },
         MOCK_REDIS_SERVER=True,
     )
 
