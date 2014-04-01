@@ -3,6 +3,11 @@
 History
 -------
 
+1.0.0 (2014-04-01)
+++++++++++++++++++
+* New backend architecture with Redis support
+* Support for broadcast messages
+
 0.2.1 (2013-12-23)
 ++++++++++++++++++
 * Added `stored_messages_count` template tag and tests
