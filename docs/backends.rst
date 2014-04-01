@@ -28,7 +28,11 @@ Redis backend
 
 Users' inbox and archives are persisted on a Redis instance. Keys are in the form
 `user:<userid>:notifications` `user:<userid>:archive` and values are lists. This backend needs the
-following settings to be specified (self explanatory): `REDIS_HOST`, `REDIS_PORT` and `REDIS_DB`.
+`REDIS_URL` settings to be specified, for example::
+
+    STORED_MESSAGES={
+        'REDIS_URL': 'redis://username:password@localhost:6379/0',
+    }
 
 Implementing your own backend
 -----------------------------
