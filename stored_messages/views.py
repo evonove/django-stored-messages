@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Inbox
 from .serializers import InboxSerializer
+from .settings import stored_messages_settings
+
+BackendClass = stored_messages_settings.STORAGE_BACKEND
 
 
 class InboxViewSet(viewsets.ReadOnlyModelViewSet):
@@ -37,5 +40,6 @@ def mark_all_read(request):
     """
     Mark all messages as read (i.e. delete from inbox) for current logged in user
     """
-    Inbox.objects.filter(user=request.user).delete()
+    backend = BackendClass()
+    backend.inbox_purge(request.user)
     return Response({"message": "All messages read"})
