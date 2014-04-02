@@ -72,6 +72,8 @@ class RedisBackend(StoredMessagesBackend):
         return Message(id=msg_id, message=msg_text, level=level, tags=extra_tags, date=r)
 
     def inbox_list(self, user):
+        if not user.pk:
+            return []
         return self._list('user:%d:notifications', user)
 
     def inbox_purge(self, user):
@@ -80,11 +82,17 @@ class RedisBackend(StoredMessagesBackend):
     def inbox_store(self, users, msg_instance):
         self._store('user:%d:notifications', users, msg_instance)
 
-    def inbox_delete(self, user, msg_instance):
-        if not self.can_handle(msg_instance):
-            raise MessageTypeNotSupported()
+    def inbox_delete(self, user, msg_id):
+        for m in self._list('user:%d:notifications', user):
+            if m.id == msg_id:
+                return self.client.lrem('user:%d:notifications' % user.pk, 0, json.dumps(m._asdict()))
+        return None
 
-        return self.client.lrem('user:%d:notifications' % user.pk, 0, json.dumps(msg_instance._asdict()))
+    def inbox_get(self, user, msg_id):
+        for m in self._list('user:%d:notifications', user):
+            if m.id == msg_id:
+                return m
+        return None
 
     def archive_store(self, users, msg_instance):
         self._store('user:%d:archive', users, msg_instance)

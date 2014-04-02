@@ -104,9 +104,8 @@ class TestRedisBackend(BaseTest):
 
     def test_inbox_delete(self):
         self.backend.inbox_store([self.user], self.message)
-        self.backend.inbox_delete(self.user, self.message)
+        self.backend.inbox_delete(self.user, self.message.id)
         self.assertEqual(len(self.backend.inbox_list(self.user)), 0)
-        self.assertRaises(MessageTypeNotSupported, self.backend.inbox_delete, self.user, {})
 
     def test_archive_store(self):
         self.backend.archive_store([self.user], self.message)
