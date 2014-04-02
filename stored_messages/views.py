@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 
 from .serializers import InboxSerializer
-from .settings import stored_messages_settings
+
 
 
 class InboxViewSet(viewsets.ViewSet):
@@ -14,21 +14,27 @@ class InboxViewSet(viewsets.ViewSet):
     marking inbox messages as read.
     """
     def list(self, request):
+        from .settings import stored_messages_settings
         backend = stored_messages_settings.STORAGE_BACKEND()
         messages = backend.inbox_list(request.user)
         serializer = InboxSerializer(messages, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        pass
+        from .settings import stored_messages_settings
+        backend = stored_messages_settings.STORAGE_BACKEND()
+        msg = backend.inbox_get(request.user, pk)
+        serializer = InboxSerializer(msg)
+        return Response(serializer.data)
 
     @action()
     def read(self, request, pk=None):
         """
         Mark the message as read (i.e. delete from inbox)
         """
-        inbox_m = self.get_object()
-        inbox_m.delete()
+        from .settings import stored_messages_settings
+        backend = stored_messages_settings.STORAGE_BACKEND()
+        backend.inbox_delete(request.user, pk)
         return Response({'status': 'message marked as read'})
 
 
@@ -38,6 +44,7 @@ def mark_all_read(request):
     """
     Mark all messages as read (i.e. delete from inbox) for current logged in user
     """
+    from .settings import stored_messages_settings
     backend = stored_messages_settings.STORAGE_BACKEND()
     backend.inbox_purge(request.user)
     return Response({"message": "All messages read"})
