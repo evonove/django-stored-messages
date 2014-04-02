@@ -8,7 +8,8 @@ class DefaultBackend(StoredMessagesBackend):
 
     """
     def inbox_list(self, user):
-        return list(Inbox.objects.filter(user=user).select_related("message"))
+        inbox = Inbox.objects.filter(user=user.pk).select_related("message")
+        return [m.message for m in inbox]
 
     def inbox_purge(self, user):
         Inbox.objects.filter(user=user).delete()
@@ -20,9 +21,9 @@ class DefaultBackend(StoredMessagesBackend):
         for user in users:
             Inbox.objects.get_or_create(user=user, message=msg_instance)
 
-    def inbox_delete(self, user, msg_instance):
+    def inbox_delete(self, user, msg_id):
         try:
-            inbox_m = Inbox.objects.filter(user=user, message=msg_instance).get()
+            inbox_m = Inbox.objects.filter(user=user, message=msg_id).get()
             inbox_m.delete()
         except Inbox.DoesNotExist:
             raise InboxDoesNotExist()
