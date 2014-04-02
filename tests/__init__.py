@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from django.test import TestCase, RequestFactory
 
 from stored_messages.compat import get_user_model
+from stored_messages import settings
+from stored_messages import storage
 
 import mock
 
@@ -20,3 +22,19 @@ class BaseTest(TestCase):
 
     def tearDown(self):
         self.user.delete()
+
+
+class BackendBaseTest(BaseTest):
+    """
+    Tests that need to access a Backend.
+    Given the dynamic nature of Stored Messages settings, retrieving the backend class when we
+    need to ovveride settings is a little bit tricky
+    """
+    def setUp(self):
+        reload(settings)
+        reload(storage)
+        self.backend = settings.stored_messages_settings.STORAGE_BACKEND()
+        super(BackendBaseTest, self).setUp()
+
+    def tearDown(self):
+        self.backend._flush()
