@@ -6,6 +6,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 import json
 from collections import namedtuple
+import hashlib
 
 from ..exceptions import MessageTypeNotSupported
 from ..base import StoredMessagesBackend
@@ -17,7 +18,7 @@ except ImportError:
     pass
 
 
-Message = namedtuple('Message', ['message', 'level', 'tags', 'date'])
+Message = namedtuple('Message', ['id', 'message', 'level', 'tags', 'date'])
 
 
 class RedisBackend(StoredMessagesBackend):
@@ -64,7 +65,8 @@ class RedisBackend(StoredMessagesBackend):
         if r.endswith('+00:00'):
             r = r[:-6] + 'Z'
 
-        return Message(message=msg_text, level=level, tags=extra_tags, date=r)
+        msg_id = hashlib.sha256(r+msg_text).hexdigest()
+        return Message(id=msg_id, message=msg_text, level=level, tags=extra_tags, date=r)
 
     def inbox_list(self, user):
         return self._list('user:%d:notifications', user)
