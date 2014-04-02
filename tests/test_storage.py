@@ -14,6 +14,9 @@ import mock
 
 
 class TestStorage(BaseTest):
+    """
+    Test Storage class using default backend
+    """
     def test_store(self):
         self.request._messages = default_storage(self.request)
         self.request._messages.level = DEBUG
@@ -67,4 +70,7 @@ class TestStorage(BaseTest):
 
 @override_settings(STORED_MESSAGES={'STORAGE_BACKEND': 'stored_messages.backends.RedisBackend'})
 class TestStorageWithRedis(TestStorage):
+    """
+    Test Storage class using Redis backend
+    """
     pass
