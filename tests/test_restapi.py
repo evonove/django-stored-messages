@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from . import BaseTest
+from . import BackendBaseTest
 
 from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
@@ -18,7 +18,7 @@ except ImportError:
 
 
 @skipUnless(rest_framework_installed, "Django restframework is not installed")
-class TestRESTApi(BaseTest):
+class TestRESTApi(BackendBaseTest):
     def test_retrieve(self):
         self.client.login(username='test_user', password='123456')
         self.client.get('/create')
