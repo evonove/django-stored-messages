@@ -26,7 +26,7 @@ Features
 
 * Seamless integration with `django.contrib.messages`
 * All the features are in a mixin you can attach to your existing storage
-* Stored messages are archived in the database
+* Stored messages are archived in the database or in a Redis instance
 * Users can configure which message levels have to be persisted
 * REST api to retrieve and mark messages as read (needs djangorestframework being installed)
 
@@ -100,6 +100,12 @@ You can mark a stored message as read at any time::
 
     stored_messages.mark_read(request.user, message)
 
+Want to store your messages on Redis instead of your database? Here you go::
+
+    STORED_MESSAGES = {
+        'STORAGE_BACKEND': 'stored_messages.backends.RedisBackend',
+        'REDIS_URL': 'redis://localhost:6379/0',
+    }
 
 Examples
 --------
