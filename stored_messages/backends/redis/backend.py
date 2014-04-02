@@ -27,18 +27,29 @@ class RedisBackend(StoredMessagesBackend):
     def __init__(self):
         self.client = redis.StrictRedis.from_url(stored_messages_settings.REDIS_URL)
 
+    def _toJSON(self, msg_instance):
+        """
+        Dump a Message instance into a JSON string
+        """
+        return json.dumps(msg_instance._asdict(), cls=DjangoJSONEncoder)
+
+    def _fromJSON(self, json_msg):
+        """
+        Return a Message instance built from data contained in a JSON string
+        """
+        return Message(**json.loads(force_text(json_msg)))
+
     def _store(self, key_tpl, users, msg_instance):
         if not self.can_handle(msg_instance):
             raise MessageTypeNotSupported()
 
         for user in users:
-            self.client.rpush(key_tpl % user.pk, json.dumps(msg_instance, cls=DjangoJSONEncoder))
+            self.client.rpush(key_tpl % user.pk, self._toJSON(msg_instance))
 
     def _list(self, key_tpl, user):
         ret = []
         for msg_json in self.client.lrange(key_tpl % user.pk, 0, -1):
-            m = Message(*json.loads(force_text(msg_json)))
-            ret.append(m)
+            ret.append(self._fromJSON(msg_json))
         return ret
 
     def create_message(self, msg_text, level, extra_tags=''):
@@ -68,7 +79,7 @@ class RedisBackend(StoredMessagesBackend):
         if not self.can_handle(msg_instance):
             raise MessageTypeNotSupported()
 
-        return self.client.lrem('user:%d:notifications' % user.pk, 0, json.dumps(msg_instance))
+        return self.client.lrem('user:%d:notifications' % user.pk, 0, json.dumps(msg_instance._asdict()))
 
     def archive_store(self, users, msg_instance):
         self._store('user:%d:archive', users, msg_instance)
