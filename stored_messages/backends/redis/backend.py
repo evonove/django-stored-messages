@@ -29,9 +29,6 @@ class RedisBackend(StoredMessagesBackend):
         self.client = redis.StrictRedis.from_url(stored_messages_settings.REDIS_URL)
 
     def _flush(self):
-        """
-        Warning: heavily destructive! (not used in the API)
-        """
         self.client.flushdb()
 
     def _toJSON(self, msg_instance):

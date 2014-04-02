@@ -8,21 +8,21 @@ class StoredMessagesBackend(object):
         Create and return a Message instance.
         Instance types depend on the backend implementation.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def inbox_list(self, user):
         """
         Retrieve all the messages in `user`'s Inbox.
         Return an iterable containing Message instances.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def inbox_purge(self, user):
         """
         Delete all the messages in `user`'s Inbox.
         Should not return anything.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def inbox_store(self, users, msg_instance):
         """
@@ -30,14 +30,14 @@ class StoredMessagesBackend(object):
         of users.
         Should not return anything.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def inbox_delete(self, user, msg_instance):
         """
         Remove a message instance from `user`'s inbox.
         Should not return anything.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def archive_store(self, users, msg_instance):
         """
@@ -45,14 +45,14 @@ class StoredMessagesBackend(object):
         of users.
         Should not return anything.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def archive_list(self, user):
         """
         Retrieve all the messages in `user`'s archive.
         Return an iterable containing Message instances.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def can_handle(self, msg_instance):
         """
@@ -60,4 +60,11 @@ class StoredMessagesBackend(object):
         of the same type of `msg_instance`.
         Return True or False
         """
-        raise NotImplementedError
+        raise NotImplementedError()
+
+    def _flush(self):
+        """
+        Clear all backend data.
+        Warning: heavily destructive! Here for convenience, not used by the API anyway.
+        """
+        raise NotImplementedError()
