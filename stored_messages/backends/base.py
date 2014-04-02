@@ -14,6 +14,9 @@ class StoredMessagesBackend(object):
         """
         Retrieve all the messages in `user`'s Inbox.
         Return an iterable containing Message instances.
+
+        Params:
+            user: Django user instance
         """
         raise NotImplementedError()
 
@@ -21,6 +24,9 @@ class StoredMessagesBackend(object):
         """
         Delete all the messages in `user`'s Inbox.
         Should not return anything.
+
+        Params:
+            user: Django user instance
         """
         raise NotImplementedError()
 
@@ -51,6 +57,9 @@ class StoredMessagesBackend(object):
         """
         Retrieve all the messages in `user`'s archive.
         Return an iterable containing Message instances.
+
+        Params:
+            user: Django user instance
         """
         raise NotImplementedError()
 
