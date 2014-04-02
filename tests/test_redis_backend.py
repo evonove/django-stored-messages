@@ -72,8 +72,6 @@ class TestRedisBackend(BaseTest):
         self.client.delete('user:%d:archive' % self.user.pk)
 
     def _same_message(self, one, other):
-        if one != other:
-            print one,other
         return one == other
 
     def _test_can_handle(self):
