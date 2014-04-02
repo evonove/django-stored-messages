@@ -68,7 +68,9 @@ class RedisBackend(StoredMessagesBackend):
         if r.endswith('+00:00'):
             r = r[:-6] + 'Z'
 
-        msg_id = hashlib.sha256(r+msg_text.encode('ascii', 'ignore')).hexdigest()
+        fingerprint = r + msg_text
+
+        msg_id = hashlib.sha256(fingerprint.encode('ascii', 'ignore')).hexdigest()
         return Message(id=msg_id, message=msg_text, level=level, tags=extra_tags, date=r)
 
     def inbox_list(self, user):
