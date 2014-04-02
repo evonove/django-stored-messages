@@ -28,6 +28,12 @@ class RedisBackend(StoredMessagesBackend):
     def __init__(self):
         self.client = redis.StrictRedis.from_url(stored_messages_settings.REDIS_URL)
 
+    def _flush(self):
+        """
+        Warning: heavily destructive! (not used in the API)
+        """
+        self.client.flushdb()
+
     def _toJSON(self, msg_instance):
         """
         Dump a Message instance into a JSON string
@@ -53,7 +59,7 @@ class RedisBackend(StoredMessagesBackend):
             ret.append(self._fromJSON(msg_json))
         return ret
 
-    def create_message(self, msg_text, level, extra_tags=''):
+    def create_message(self, level, msg_text, extra_tags=''):
         """
         Message instances are plain python dictionaries.
         The date field is already serialized in datetime.isoformat ECMA-262 format
@@ -65,7 +71,7 @@ class RedisBackend(StoredMessagesBackend):
         if r.endswith('+00:00'):
             r = r[:-6] + 'Z'
 
-        msg_id = hashlib.sha256(r+msg_text).hexdigest()
+        msg_id = hashlib.sha256(r+msg_text.encode('ascii', 'ignore')).hexdigest()
         return Message(id=msg_id, message=msg_text, level=level, tags=extra_tags, date=r)
 
     def inbox_list(self, user):
