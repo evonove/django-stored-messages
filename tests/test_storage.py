@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from . import BaseTest
 
 from django.contrib.messages.storage import default_storage
+from django.test.utils import override_settings
 
 from stored_messages import add_message, get_messages, STORED_ERROR, DEBUG, ERROR
 from stored_messages.settings import stored_messages_settings
@@ -62,3 +63,8 @@ class TestStorage(BaseTest):
         self.client.get('/consume')
         backend = BackendClass()
         self.assertEqual(len(backend.inbox_list(self.user)), 0)
+
+
+@override_settings(STORED_MESSAGES={'STORAGE_BACKEND': 'stored_messages.backends.RedisBackend'})
+class TestStorageWithRedis(TestStorage):
+    pass
