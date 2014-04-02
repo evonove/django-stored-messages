@@ -43,3 +43,8 @@ class DefaultBackend(StoredMessagesBackend):
 
     def can_handle(self, message):
         return isinstance(message, Message)
+
+    def _flush(self):
+        Inbox.objects.all().delete()
+        MessageArchive.objects.all().delete()
+        Message.objects.all().delete()
