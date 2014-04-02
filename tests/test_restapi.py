@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from . import BaseTest
 
 from django.core.urlresolvers import reverse
+from django.test.utils import override_settings
 from unittest import skipUnless
 
 import json
@@ -57,3 +58,9 @@ class TestRESTApi(BaseTest):
         r = self.client.get(reverse('stored_messages:inbox-list'))
         messages = json.loads(r.content.decode('utf-8'))
         self.assertEqual(len(messages), 0)
+
+
+@skipUnless(rest_framework_installed, "Django restframework is not installed")
+@override_settings(STORED_MESSAGES={'STORAGE_BACKEND': 'stored_messages.backends.RedisBackend'})
+class _TestRESTApiWithRedis(TestRESTApi):
+    pass

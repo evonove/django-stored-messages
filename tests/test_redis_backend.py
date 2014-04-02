@@ -61,7 +61,8 @@ class TestRedisBackend(BaseTest):
         super(TestRedisBackend, self).setUp()
         self.client = redis.StrictRedis.from_url(settings.STORED_MESSAGES['REDIS_URL'])
         self.backend = RedisBackend()
-        self.message = self.backend.create_message('A message for you', STORED_ERROR)
+        self.backend._flush()
+        self.message = self.backend.create_message(STORED_ERROR, 'A message for you')
 
     def tearDown(self):
         self.client.delete('user:%d:notifications' % self.user.pk)
@@ -84,7 +85,7 @@ class TestRedisBackend(BaseTest):
         self.assertRaises(MessageTypeNotSupported, self.backend.inbox_store, [], {})
 
     def test_inbox_list(self):
-        message = self.backend.create_message('Another message for you', STORED_ERROR)
+        message = self.backend.create_message(STORED_ERROR, 'Another message for you')
         self.backend.inbox_store([self.user], message)
         self.backend.inbox_store([self.user], self.message)
         messages = self.backend.inbox_list(self.user)
@@ -92,7 +93,7 @@ class TestRedisBackend(BaseTest):
         self.assertTrue(self._same_message(messages[1], self.message))
 
     def test_inbox_purge(self):
-        message = self.backend.create_message('Another message for you', STORED_ERROR)
+        message = self.backend.create_message(STORED_ERROR, 'Another message for you')
         self.backend.inbox_store([self.user], self.message)
         self.backend.inbox_store([self.user], message)
         self.backend.inbox_purge(self.user)
@@ -111,7 +112,7 @@ class TestRedisBackend(BaseTest):
         self.assertRaises(MessageTypeNotSupported, self.backend.archive_store, [], {})
 
     def test_archive_list(self):
-        message = self.backend.create_message('Another message for you', STORED_ERROR)
+        message = self.backend.create_message(STORED_ERROR, 'Another message for you')
         self.backend.archive_store([self.user], message)
         self.backend.archive_store([self.user], self.message)
         messages = self.backend.archive_list(self.user)
