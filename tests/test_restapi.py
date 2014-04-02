@@ -62,5 +62,5 @@ class TestRESTApi(BaseTest):
 
 @skipUnless(rest_framework_installed, "Django restframework is not installed")
 @override_settings(STORED_MESSAGES={'STORAGE_BACKEND': 'stored_messages.backends.RedisBackend'})
-class _TestRESTApiWithRedis(TestRESTApi):
+class TestRESTApiWithRedis(TestRESTApi):
     pass

@@ -34,6 +34,9 @@ class RedisMock(object):
         l.remove(data)
         cache.set(key, l)
 
+    def flushdb(self):
+        cache.clear()
+
     @staticmethod
     def from_url(*args, **kwargs):
         return RedisMock()
