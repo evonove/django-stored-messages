@@ -4,25 +4,23 @@ from rest_framework.response import Response
 
 from django.contrib.auth.decorators import login_required
 
-from .models import Inbox
 from .serializers import InboxSerializer
 from .settings import stored_messages_settings
 
-BackendClass = stored_messages_settings.STORAGE_BACKEND
 
-
-class InboxViewSet(viewsets.ReadOnlyModelViewSet):
+class InboxViewSet(viewsets.ViewSet):
     """
     Provides `list` and `detail` actions, plus a `read` POST endpoint for
     marking inbox messages as read.
     """
-    serializer_class = InboxSerializer
-    model = Inbox
+    def list(self, request):
+        backend = stored_messages_settings.STORAGE_BACKEND()
+        messages = backend.inbox_list(request.user)
+        serializer = InboxSerializer(messages, many=True)
+        return Response(serializer.data)
 
-    def get_queryset(self):
-        if self.request.user.is_authenticated():
-            return Inbox.objects.filter(user=self.request.user)
-        return Inbox.objects.none()
+    def retrieve(self, request, pk=None):
+        pass
 
     @action()
     def read(self, request, pk=None):
@@ -40,6 +38,6 @@ def mark_all_read(request):
     """
     Mark all messages as read (i.e. delete from inbox) for current logged in user
     """
-    backend = BackendClass()
+    backend = stored_messages_settings.STORAGE_BACKEND()
     backend.inbox_purge(request.user)
     return Response({"message": "All messages read"})
