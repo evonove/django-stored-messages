@@ -53,6 +53,9 @@ class StoredMessagesBackend(object):
 
         Return:
             None
+
+        Raise:
+            MessageTypeNotSupported if `msg_instance` cannot be managed by current backend
         """
         raise NotImplementedError()
 
@@ -66,8 +69,26 @@ class StoredMessagesBackend(object):
 
         Return:
             None
+
+        Raise:
+            MessageDoesNotExist if msg_id was not found
         """
         raise NotImplementedError()
+
+    def inbox_get(self, user, msg_id):
+        """
+        Retrieve a `Message` instance from `user`'s inbox.
+
+        Params:
+            user: Django User instance
+            msg_id: Message identifier
+
+        Return:
+            A `Message` instance
+
+        Raise:
+            MessageDoesNotExist if msg_id was not found
+        """
 
     def archive_store(self, users, msg_instance):
         """
@@ -80,6 +101,9 @@ class StoredMessagesBackend(object):
 
         Return:
             None
+
+        Raise:
+            MessageTypeNotSupported if `msg_instance` cannot be managed by current backend
         """
         raise NotImplementedError()
 
