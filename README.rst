@@ -25,7 +25,7 @@ Features
 
 * Seamless integration with `django.contrib.messages`
 * All the features are in a mixin you can attach to your existing storage
-* Stored messages are archived in the database or in a Redis instance (Beta)
+* Stored messages are archived in the database or in a Redis instance
 * Users can configure which message levels have to be persisted
 * REST api to retrieve and mark messages as read (needs djangorestframework being installed)
 
