@@ -70,18 +70,10 @@ class TestRedisBackend(BaseTest):
         self.message = self.backend.create_message(STORED_ERROR, 'A message for you')
         self.anon = AnonymousUser()
 
-    def _same_message(self, one, other):
-        return one == other
-
-    def _test_can_handle(self):
-        self.assertTrue(self.backend.can_handle(self.message))
-        self.message['foo'] = 'bar'
-        self.assertFalse(self.backend.can_handle(self.message))
-
     def test_inbox_store(self):
         self.backend.inbox_store([self.user], self.message)
         data = self.client.lrange('user:%d:notifications' % self.user.pk, 0, -1).pop()
-        self.assertTrue(self._same_message(self.backend._fromJSON(data), self.message))
+        self.assertEqual(self.backend._fromJSON(data), self.message)
         self.assertRaises(MessageTypeNotSupported, self.backend.inbox_store, [], {})
 
     def test_inbox_list(self):
@@ -89,8 +81,8 @@ class TestRedisBackend(BaseTest):
         self.backend.inbox_store([self.user], message)
         self.backend.inbox_store([self.user], self.message)
         messages = self.backend.inbox_list(self.user)
-        self.assertTrue(self._same_message(messages[0], message))
-        self.assertTrue(self._same_message(messages[1], self.message))
+        self.assertEqual(messages[0], message)
+        self.assertEqual(messages[1], self.message)
         self.assertEqual(self.backend.inbox_list(self.anon), [])
 
     def test_inbox_purge(self):
@@ -110,7 +102,7 @@ class TestRedisBackend(BaseTest):
     def test_archive_store(self):
         self.backend.archive_store([self.user], self.message)
         data = self.client.lrange('user:%d:archive' % self.user.pk, 0, -1).pop()
-        self.assertTrue(self._same_message(self.backend._fromJSON(data), self.message))
+        self.assertEqual(self.backend._fromJSON(data), self.message)
         self.assertRaises(MessageTypeNotSupported, self.backend.archive_store, [], {})
 
     def test_archive_list(self):
@@ -118,8 +110,8 @@ class TestRedisBackend(BaseTest):
         self.backend.archive_store([self.user], message)
         self.backend.archive_store([self.user], self.message)
         messages = self.backend.archive_list(self.user)
-        self.assertTrue(self._same_message(messages[0], message))
-        self.assertTrue(self._same_message(messages[1], self.message))
+        self.assertEqual(messages[0], message)
+        self.assertEqual(messages[1], self.message)
 
     def test_create_message(self):
         message = self.backend.create_message(STORED_ERROR, 'Another message for you')
