@@ -8,11 +8,12 @@ import json
 from collections import namedtuple
 import hashlib
 
-from ..exceptions import MessageTypeNotSupported
+from ..exceptions import MessageTypeNotSupported, MessageDoesNotExist
 from ..base import StoredMessagesBackend
 from ...settings import stored_messages_settings
 
 try:
+    # Let django project bootstrap anyway when not using this backend
     import redis
 except ImportError:
     pass
@@ -44,6 +45,9 @@ class RedisBackend(StoredMessagesBackend):
         return Message(**json.loads(force_text(json_msg)))
 
     def _store(self, key_tpl, users, msg_instance):
+        """
+        boilerplate
+        """
         if not self.can_handle(msg_instance):
             raise MessageTypeNotSupported()
 
@@ -51,6 +55,9 @@ class RedisBackend(StoredMessagesBackend):
             self.client.rpush(key_tpl % user.pk, self._toJSON(msg_instance))
 
     def _list(self, key_tpl, user):
+        """
+        boilerplate
+        """
         ret = []
         for msg_json in self.client.lrange(key_tpl % user.pk, 0, -1):
             ret.append(self._fromJSON(msg_json))
@@ -58,7 +65,7 @@ class RedisBackend(StoredMessagesBackend):
 
     def create_message(self, level, msg_text, extra_tags=''):
         """
-        Message instances are plain python dictionaries.
+        Message instances are namedtuples of type `Message`.
         The date field is already serialized in datetime.isoformat ECMA-262 format
         """
         now = timezone.now()
@@ -74,12 +81,13 @@ class RedisBackend(StoredMessagesBackend):
         return Message(id=msg_id, message=msg_text, level=level, tags=extra_tags, date=r)
 
     def inbox_list(self, user):
-        if not user.pk:
+        if user.is_anonymous():
             return []
         return self._list('user:%d:notifications', user)
 
     def inbox_purge(self, user):
-        self.client.delete('user:%d:notifications' % user.pk)
+        if user.is_authenticated():
+            self.client.delete('user:%d:notifications' % user.pk)
 
     def inbox_store(self, users, msg_instance):
         self._store('user:%d:notifications', users, msg_instance)
@@ -88,13 +96,13 @@ class RedisBackend(StoredMessagesBackend):
         for m in self._list('user:%d:notifications', user):
             if m.id == msg_id:
                 return self.client.lrem('user:%d:notifications' % user.pk, 0, json.dumps(m._asdict()))
-        return None
+        raise MessageDoesNotExist()
 
     def inbox_get(self, user, msg_id):
         for m in self._list('user:%d:notifications', user):
             if m.id == msg_id:
                 return m
-        return None
+        raise MessageDoesNotExist()
 
     def archive_store(self, users, msg_instance):
         self._store('user:%d:archive', users, msg_instance)

@@ -5,9 +5,11 @@ import mock
 
 from django.conf import settings
 from django.core.cache import cache
+from django.contrib.auth.models import AnonymousUser
 
-from stored_messages.backends.exceptions import MessageTypeNotSupported
+from stored_messages.backends.exceptions import MessageTypeNotSupported, MessageDoesNotExist
 from stored_messages.backends.redis import RedisBackend
+from stored_messages.backends.redis.backend import Message
 
 from stored_messages import STORED_ERROR
 
@@ -66,6 +68,7 @@ class TestRedisBackend(BaseTest):
         self.backend = RedisBackend()
         self.backend._flush()
         self.message = self.backend.create_message(STORED_ERROR, 'A message for you')
+        self.anon = AnonymousUser()
 
     def tearDown(self):
         self.client.delete('user:%d:notifications' % self.user.pk)
@@ -92,6 +95,7 @@ class TestRedisBackend(BaseTest):
         messages = self.backend.inbox_list(self.user)
         self.assertTrue(self._same_message(messages[0], message))
         self.assertTrue(self._same_message(messages[1], self.message))
+        self.assertEqual(self.backend.inbox_list(self.anon), [])
 
     def test_inbox_purge(self):
         message = self.backend.create_message(STORED_ERROR, 'Another message for you')
@@ -99,11 +103,13 @@ class TestRedisBackend(BaseTest):
         self.backend.inbox_store([self.user], message)
         self.backend.inbox_purge(self.user)
         self.assertEqual(len(self.backend.inbox_list(self.user)), 0)
+        self.backend.inbox_purge(self.anon)
 
     def test_inbox_delete(self):
         self.backend.inbox_store([self.user], self.message)
         self.backend.inbox_delete(self.user, self.message.id)
         self.assertEqual(len(self.backend.inbox_list(self.user)), 0)
+        self.assertRaises(MessageDoesNotExist, self.backend.inbox_delete, self.user, -1)
 
     def test_archive_store(self):
         self.backend.archive_store([self.user], self.message)
@@ -118,3 +124,17 @@ class TestRedisBackend(BaseTest):
         messages = self.backend.archive_list(self.user)
         self.assertTrue(self._same_message(messages[0], message))
         self.assertTrue(self._same_message(messages[1], self.message))
+
+    def test_create_message(self):
+        message = self.backend.create_message(STORED_ERROR, 'Another message for you')
+        self.assertIsInstance(message, Message)
+
+    def test_inbox_get(self):
+        self.backend.inbox_store([self.user], self.message)
+        m = self.backend.inbox_get(self.user, self.message.id)
+        self.assertEqual(m, self.message)
+        self.assertRaises(MessageDoesNotExist, self.backend.inbox_get, self.user, -1)
+
+    def test_can_handle(self):
+        self.assertFalse(self.backend.can_handle({}))
+        self.assertTrue(self.backend.can_handle(self.message))
