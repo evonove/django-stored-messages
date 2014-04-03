@@ -4,5 +4,5 @@ class MessageTypeNotSupported(Exception):
     pass
 
 
-class InboxDoesNotExist(Exception):
+class MessageDoesNotExist(Exception):
     pass
