@@ -70,10 +70,6 @@ class TestRedisBackend(BaseTest):
         self.message = self.backend.create_message(STORED_ERROR, 'A message for you')
         self.anon = AnonymousUser()
 
-    def tearDown(self):
-        self.client.delete('user:%d:notifications' % self.user.pk)
-        self.client.delete('user:%d:archive' % self.user.pk)
-
     def _same_message(self, one, other):
         return one == other
 
