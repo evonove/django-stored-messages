@@ -56,7 +56,7 @@ class StoredMessagesBackend(object):
         """
         raise NotImplementedError()
 
-    def inbox_delete(self, user, msg_instance):
+    def inbox_delete(self, user, msg_id):
         """
         Remove a `Message` instance from `user`'s inbox.
 
