@@ -5,61 +5,93 @@ class StoredMessagesBackend(object):
     """
     def create_message(self, level, msg_text, extra_tags):
         """
-        Create and return a Message instance.
-        Instance types depend on the backend implementation.
+        Create and return a `Message` instance.
+        Instance types depend on backends implementation.
+
+        Params:
+            `level`: message level (see django.contrib.messages)
+            `msg_text`: what you think it is
+            `extra_tags`: see django.contrib.messages
+
+        Return:
+            `Message` instance
         """
         raise NotImplementedError()
 
     def inbox_list(self, user):
         """
         Retrieve all the messages in `user`'s Inbox.
-        Return an iterable containing Message instances.
 
         Params:
-            user: Django user instance
+            `user`: Django User instance
+
+        Return:
+            An iterable containing `Message` instances
         """
         raise NotImplementedError()
 
     def inbox_purge(self, user):
         """
         Delete all the messages in `user`'s Inbox.
-        Should not return anything.
 
         Params:
-            user: Django user instance
+            user: Django User instance
+
+        Return:
+            None
         """
         raise NotImplementedError()
 
     def inbox_store(self, users, msg_instance):
         """
-        Store a message instance in the inbox for a list
+        Store a `Message` instance in the inbox for a list
         of users.
-        Should not return anything.
+
+        Params:
+            users: a list or iterable containing Django User instances
+            msg_instance: Message instance to persist in inbox
+
+        Return:
+            None
         """
         raise NotImplementedError()
 
     def inbox_delete(self, user, msg_instance):
         """
-        Remove a message instance from `user`'s inbox.
-        Should not return anything.
+        Remove a `Message` instance from `user`'s inbox.
+
+        Params:
+            user: Django User instance
+            msg_id: Message identifier
+
+        Return:
+            None
         """
         raise NotImplementedError()
 
     def archive_store(self, users, msg_instance):
         """
-        Store a message instance in the archive for a list
+        Store a `Message` instance in the archive for a list
         of users.
-        Should not return anything.
+
+        Params:
+            users: a list or iterable containing Django User instances
+            msg_instance: Message instance to persist in archive
+
+        Return:
+            None
         """
         raise NotImplementedError()
 
     def archive_list(self, user):
         """
         Retrieve all the messages in `user`'s archive.
-        Return an iterable containing Message instances.
 
         Params:
-            user: Django user instance
+            user: Django User instance
+
+        Return:
+            An iterable containing `Message` instances
         """
         raise NotImplementedError()
 
@@ -67,7 +99,12 @@ class StoredMessagesBackend(object):
         """
         Determine if this backend can handle messages
         of the same type of `msg_instance`.
-        Return True or False
+
+        Params:
+            `msg_instance`: `Message` instance
+
+        Return:
+            True if type is correct, False otherwise
         """
         raise NotImplementedError()
 
@@ -75,5 +112,11 @@ class StoredMessagesBackend(object):
         """
         Clear all backend data.
         Warning: heavily destructive! Here for convenience, not used by the API anyway.
+
+        Params:
+            None
+
+        Return:
+            None
         """
         raise NotImplementedError()
