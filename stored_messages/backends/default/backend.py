@@ -33,11 +33,11 @@ class DefaultBackend(StoredMessagesBackend):
 
     def inbox_get(self, user, msg_id):
         try:
-            return Inbox.objects.get(msg_id)
+            return Inbox.objects.get(pk=msg_id)
         except Inbox.DoesNotExist:
             raise MessageDoesNotExist()
 
-    def create_message(self, level, msg_text, extra_tags):
+    def create_message(self, level, msg_text, extra_tags=''):
         m_instance = Message.objects.create(message=msg_text, level=level, tags=extra_tags)
         return m_instance
 
