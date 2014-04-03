@@ -8,11 +8,14 @@ class DefaultBackend(StoredMessagesBackend):
 
     """
     def inbox_list(self, user):
-        inbox = Inbox.objects.filter(user=user.pk).select_related("message")
+        if user.is_anonymous():
+            return Inbox.objects.none()
+        inbox = Inbox.objects.filter(user=user).select_related("message")
         return [m.message for m in inbox]
 
     def inbox_purge(self, user):
-        Inbox.objects.filter(user=user).delete()
+        if user.is_authenticated():
+            Inbox.objects.filter(user=user).delete()
 
     def inbox_store(self, users, msg_instance):
         if not self.can_handle(msg_instance):
