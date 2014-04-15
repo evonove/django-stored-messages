@@ -40,7 +40,12 @@ class InboxViewSet(viewsets.ViewSet):
         """
         from .settings import stored_messages_settings
         backend = stored_messages_settings.STORAGE_BACKEND()
-        backend.inbox_delete(request.user, pk)
+
+        try:
+            backend.inbox_delete(request.user, pk)
+        except MessageDoesNotExist as e:
+            return Response(e.message, status='404')
+
         return Response({'status': 'message marked as read'})
 
 
