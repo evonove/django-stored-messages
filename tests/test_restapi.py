@@ -19,7 +19,7 @@ except ImportError:
 
 @skipUnless(rest_framework_installed, "Django restframework is not installed")
 class TestRESTApi(BackendBaseTest):
-    def test_retrieve(self):
+    def test_list(self):
         self.client.login(username='test_user', password='123456')
         self.client.get('/create')
         self.client.get('/create')
@@ -30,6 +30,19 @@ class TestRESTApi(BackendBaseTest):
         self.assertEqual(messages[1]['message'], 'an error ☢')
         self.assertEqual(messages[0]['level'], STORED_ERROR)
         self.assertEqual(messages[1]['level'], STORED_ERROR)
+
+    def test_retrieve(self):
+        self.client.login(username='test_user', password='123456')
+        self.client.get('/create')
+        r = self.client.get(reverse('stored_messages:inbox-list'))
+        messages = json.loads(r.content.decode('utf-8'))
+        id = messages[0]['id']
+
+        r = self.client.get(reverse('stored_messages:inbox-detail', kwargs={'pk':id}))
+
+        message = json.loads(r.content.decode('utf-8'))
+        self.assertEqual(message['message'], 'an error ☢')
+        self.assertEqual(message['id'], id)
 
     def test_make_read(self):
         self.client.login(username='test_user', password='123456')

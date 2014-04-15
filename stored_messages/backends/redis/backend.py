@@ -96,13 +96,13 @@ class RedisBackend(StoredMessagesBackend):
         for m in self._list('user:%d:notifications', user):
             if m.id == msg_id:
                 return self.client.lrem('user:%d:notifications' % user.pk, 0, json.dumps(m._asdict()))
-        raise MessageDoesNotExist()
+        raise MessageDoesNotExist("Message with id %s does not exist" % msg_id)
 
     def inbox_get(self, user, msg_id):
         for m in self._list('user:%d:notifications', user):
             if m.id == msg_id:
                 return m
-        raise MessageDoesNotExist()
+        raise MessageDoesNotExist("Message with id %s does not exist" % msg_id)
 
     def archive_store(self, users, msg_instance):
         self._store('user:%d:archive', users, msg_instance)
