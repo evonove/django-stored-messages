@@ -46,3 +46,6 @@ docs/_build
 
 # PyCharm
 .idea
+
+# vim
+*.swp
