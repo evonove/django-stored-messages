@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 
 from .serializers import InboxSerializer
+from .backends.exceptions import MessageDoesNotExist
 
 
 
@@ -23,8 +24,13 @@ class InboxViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         from .settings import stored_messages_settings
         backend = stored_messages_settings.STORAGE_BACKEND()
-        msg = backend.inbox_get(request.user, pk)
-        serializer = InboxSerializer(msg)
+
+        try:
+            msg = backend.inbox_get(request.user, pk)
+        except MessageDoesNotExist as e:
+            return Response(e.message, status='404')
+
+        serializer = InboxSerializer(msg, many=False)
         return Response(serializer.data)
 
     @action()
@@ -34,7 +40,12 @@ class InboxViewSet(viewsets.ViewSet):
         """
         from .settings import stored_messages_settings
         backend = stored_messages_settings.STORAGE_BACKEND()
-        backend.inbox_delete(request.user, pk)
+
+        try:
+            backend.inbox_delete(request.user, pk)
+        except MessageDoesNotExist as e:
+            return Response(e.message, status='404')
+
         return Response({'status': 'message marked as read'})
 
 

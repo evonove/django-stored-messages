@@ -68,7 +68,7 @@ class TestDefaultBackend(BaseTest):
     def test_inbox_get(self):
         self.backend.inbox_store([self.user], self.message)
         m = self.backend.inbox_get(self.user, self.message.id)
-        self.assertEqual(m.message, self.message)
+        self.assertEqual(m, self.message)
         self.assertRaises(MessageDoesNotExist, self.backend.inbox_get, self.user, -1)
 
     def test_can_handle(self):

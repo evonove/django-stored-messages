@@ -29,13 +29,13 @@ class DefaultBackend(StoredMessagesBackend):
             inbox_m = Inbox.objects.filter(user=user, message=msg_id).get()
             inbox_m.delete()
         except Inbox.DoesNotExist:
-            raise MessageDoesNotExist()
+            raise MessageDoesNotExist("Message with id %s does not exist" % msg_id)
 
     def inbox_get(self, user, msg_id):
         try:
-            return Inbox.objects.get(pk=msg_id)
+            return Inbox.objects.get(pk=msg_id).message
         except Inbox.DoesNotExist:
-            raise MessageDoesNotExist()
+            raise MessageDoesNotExist("Message with id %s does not exist" % msg_id)
 
     def create_message(self, level, msg_text, extra_tags=''):
         m_instance = Message.objects.create(message=msg_text, level=level, tags=extra_tags)
