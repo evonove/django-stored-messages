@@ -4,7 +4,7 @@
 import os
 import sys
 
-version = '1.0.0'  # when changing this, please take a moment for doing the same in docs/conf.py
+version = '1.0.1'  # when changing this, please take a moment for doing the same in docs/conf.py
 
 try:
     from setuptools import setup
