@@ -3,6 +3,13 @@
 History
 -------
 
+1.0.1 (2014-04-17)
+++++++++++++++++++
+* Major bug fixed on `inbox_get()` backend api
+* Fixed InboxSerializer for redis backend messages
+* Enhanced testsuite
+* Added MessageDoesNotExist descriptions and return 404
+
 1.0.0 (2014-04-01)
 ++++++++++++++++++
 * New backend architecture with Redis support
