@@ -1,6 +1,5 @@
-=============================
 Django Stored Messages
-=============================
+======================
 
 .. image:: https://badge.fury.io/py/django-stored-messages.png
     :target: http://badge.fury.io/py/django-stored-messages
