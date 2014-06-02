@@ -9,7 +9,7 @@ class DefaultBackend(StoredMessagesBackend):
     """
     def inbox_list(self, user):
         if user.is_anonymous():
-            return Inbox.objects.none()
+            return []
         inbox = Inbox.objects.filter(user=user).select_related("message")
         return [m.message for m in inbox]
 
