@@ -39,6 +39,20 @@ class RedisMock(object):
     def flushdb(self):
         cache.clear()
 
+    def sismember(self, key, val):
+        r = cache.get(key)
+        return r is not None and val in r
+
+    def sadd(self, key, val):
+        l = cache.get(key)
+
+        if l is None:
+            l = []
+
+        if val not in l:
+            l.append(val)
+            cache.set(key, l)
+
     @staticmethod
     def from_url(*args, **kwargs):
         return RedisMock()
