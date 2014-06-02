@@ -44,16 +44,6 @@ class RedisBackend(StoredMessagesBackend):
         """
         return Message(**json.loads(force_text(json_msg)))
 
-    def _store(self, key_tpl, users, msg_instance):
-        """
-        boilerplate
-        """
-        if not self.can_handle(msg_instance):
-            raise MessageTypeNotSupported()
-
-        for user in users:
-            self.client.rpush(key_tpl % user.pk, self._toJSON(msg_instance))
-
     def _list(self, key_tpl, user):
         """
         boilerplate
@@ -88,9 +78,19 @@ class RedisBackend(StoredMessagesBackend):
     def inbox_purge(self, user):
         if user.is_authenticated():
             self.client.delete('user:%d:notifications' % user.pk)
+            self.client.delete('user:%d:notificationsidx' % user.pk)
 
     def inbox_store(self, users, msg_instance):
-        self._store('user:%d:notifications', users, msg_instance)
+        if not self.can_handle(msg_instance):
+            raise MessageTypeNotSupported()
+
+        for user in users:
+            if self.client.sismember('user:%d:notificationsidx' % user.pk, msg_instance.id):
+                return  # a duplicate, NOOP
+            else:
+                self.client.sadd('user:%d:notificationsidx' % user.pk, msg_instance.id)
+
+            self.client.rpush('user:%d:notifications' % user.pk, self._toJSON(msg_instance))
 
     def inbox_delete(self, user, msg_id):
         for m in self._list('user:%d:notifications', user):
@@ -105,7 +105,11 @@ class RedisBackend(StoredMessagesBackend):
         raise MessageDoesNotExist("Message with id %s does not exist" % msg_id)
 
     def archive_store(self, users, msg_instance):
-        self._store('user:%d:archive', users, msg_instance)
+        if not self.can_handle(msg_instance):
+            raise MessageTypeNotSupported()
+
+        for user in users:
+            self.client.rpush('user:%d:archive' % user.pk, self._toJSON(msg_instance))
 
     def archive_list(self, user):
         return self._list('user:%d:archive', user)
