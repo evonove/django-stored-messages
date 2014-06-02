@@ -31,7 +31,8 @@ class StorageMixin(object):
             inbox_messages = self.backend.inbox_list(self.user)
         else:
             inbox_messages = []
-        return messages + [im.message for im in inbox_messages], all_retrieved
+
+        return messages + inbox_messages, all_retrieved
 
     def add(self, level, message, extra_tags=''):
         """
