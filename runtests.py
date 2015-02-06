@@ -32,6 +32,14 @@ try:
         },
         ROOT_URLCONF="stored_messages.urls",
         INSTALLED_APPS=INSTALLED_APPS,
+        # Django 1.7 has a new, minimal default set for MIDDLEWARE_CLASSES so be explicit
+        MIDDLEWARE_CLASSES=(
+            'django.middleware.common.CommonMiddleware',
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.middleware.csrf.CsrfViewMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+        ),
         SITE_ID=1,
         NOSE_ARGS=['-s'],
         MESSAGE_STORAGE='stored_messages.storage.PersistentStorage',
