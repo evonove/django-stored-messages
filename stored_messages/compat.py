@@ -19,3 +19,9 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
     get_user_model = lambda: User
+
+# DRF 3.0 compatibility layer
+try:
+    from rest_framework.decorators import action as detail_route
+except ImportError:
+    from rest_framework.decorators import detail_route

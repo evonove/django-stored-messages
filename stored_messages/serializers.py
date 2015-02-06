@@ -6,4 +6,4 @@ class InboxSerializer(serializers.Serializer):
     message = serializers.CharField()
     level = serializers.IntegerField()
     tags = serializers.CharField()
-    date = serializers.DateTimeField()
+    date = serializers.DateTimeField(format=None)
