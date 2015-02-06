@@ -27,13 +27,14 @@ Features
 * All the features are in a mixin you can attach to your existing storage
 * Stored messages are archived in the database or in a Redis instance
 * Users can configure which message levels have to be persisted
-* REST api to retrieve and mark messages as read (needs djangorestframework being installed)
+* REST api to retrieve and mark messages as read (needs djangorestframework v2 or v3 being installed)
 
 Requirements
 ------------
 
-* Django 1.4/1.5/1.6
-* Python 2.7/3.3
+* Django 1.4/1.5/1.6/1.7
+* Python 2.7/3.4
+* DRF 2/3 (only if you want to use REST endpoints)
 
 Documentation
 -------------
