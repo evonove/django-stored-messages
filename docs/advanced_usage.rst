@@ -9,6 +9,7 @@ which consists of the following endpoints:
 
  * `/inbox/` - method: `GET`: retrieve the list of unread messages for current logged in user.
  * `/inbox/{lookup}/` - method: `GET`: get the details for the message having `{lookup}` pk.
+ * `/inbox/{lookup}/read/` - method: `POST`: mark the message having `{lookup}` pk as read.
  * `/mark_all_read/` - method: `POST`: mark all messages as read for current logged in user.
 
 
