@@ -3,15 +3,12 @@ Django Stored Messages
 
 .. image:: https://badge.fury.io/py/django-stored-messages.png
     :target: http://badge.fury.io/py/django-stored-messages
-    
+
 .. image:: https://travis-ci.org/evonove/django-stored-messages.png?branch=master
         :target: https://travis-ci.org/evonove/django-stored-messages
 
 .. image:: https://coveralls.io/repos/evonove/django-stored-messages/badge.png
         :target: https://coveralls.io/r/evonove/django-stored-messages
-
-.. image:: https://pypip.in/d/django-stored-messages/badge.png
-        :target: https://crate.io/packages/django-stored-messages?version=latest
 
 
 Django contrib.messages on steroids
