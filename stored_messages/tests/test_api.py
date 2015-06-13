@@ -21,9 +21,9 @@ class TestApi(BaseTest):
     def test_mark_as_read_idempotent(self):
         self.client.login(username='test_user', password='123456')
         self.client.get('/create')
-        msg = MessageArchive.objects.filter(user=self.user).get()
-        mark_read(self.user, msg)
-        self.assertRaises(MessageDoesNotExist, mark_read, self.user, msg)
+        msg_archive = MessageArchive.objects.filter(user=self.user).get()
+        mark_read(self.user, msg_archive.message)
+        self.assertRaises(MessageDoesNotExist, mark_read, self.user, msg_archive.message)
 
     def test_add_message_for(self):
         user2 = get_user_model().objects.create_user("another_user", "u@user.com", "123456")
