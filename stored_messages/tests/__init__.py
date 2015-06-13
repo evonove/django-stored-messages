@@ -3,19 +3,14 @@ from __future__ import unicode_literals
 from django.test import TestCase, RequestFactory
 from django.utils.six.moves import reload_module
 
-
-from stored_messages import settings
-from stored_messages import storage
-
 import mock
 
 
 class BaseTest(TestCase):
-    urls = 'tests.urls'
+    urls = 'stored_messages.tests.urls'
 
     def setUp(self):
         from stored_messages.compat import get_user_model
-
         self.factory = RequestFactory()
 
         self.user = get_user_model().objects.create_user("test_user", "t@user.com", "123456")
@@ -34,8 +29,12 @@ class BackendBaseTest(BaseTest):
     need to ovveride settings is a little bit tricky
     """
     def setUp(self):
+        from stored_messages import settings
+        from stored_messages import storage
+
         reload_module(settings)
         reload_module(storage)
+
         self.backend = settings.stored_messages_settings.STORAGE_BACKEND()
         super(BackendBaseTest, self).setUp()
 
