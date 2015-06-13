@@ -37,7 +37,7 @@ MIDDLEWARE_CLASSES = (
 
 SITE_ID = 1
 
-MESSAGE_STORAGE = 'stored_messages.storage.PersistentStorage',
+MESSAGE_STORAGE = 'stored_messages.storage.PersistentStorage'
 STORED_MESSAGES = {
     'REDIS_URL': 'redis://localhost:6379/0',
 }
@@ -48,7 +48,7 @@ import django
 
 if django.VERSION[:2] < (1, 6):
     TEST_RUNNER = 'discover_runner.DiscoverRunner'
-    INSTALLED_APPS += ('discover_runner',)
+    INSTALLED_APPS.append('discover_runner')
 else:
     TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
