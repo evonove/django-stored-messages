@@ -8,7 +8,7 @@ import stored_messages
 def message_view(request):
     keep_storage = request.GET.get('keep_storage', False)
     storage = stored_messages.get_messages(request)
-    for message in storage:
+    for _ in storage:
         pass
     if keep_storage:
         storage.used = False

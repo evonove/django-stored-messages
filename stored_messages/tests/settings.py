@@ -24,7 +24,7 @@ DATABASES = {
     }
 }
 
-ROOT_URLCONF = "stored_messages.urls"
+ROOT_URLCONF = "stored_messages.tests.urls"
 
 # Django 1.7 has a new, minimal default set for MIDDLEWARE_CLASSES so be explicit
 MIDDLEWARE_CLASSES = (
