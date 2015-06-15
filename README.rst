@@ -29,7 +29,7 @@ Features
 Requirements
 ------------
 
-* Django 1.4/1.5/1.6/1.7
+* Django 1.4/1.5/1.6/1.7/1.8
 * Python 2.7/3.4
 * DRF 2/3 (only if you want to use REST endpoints)
 
