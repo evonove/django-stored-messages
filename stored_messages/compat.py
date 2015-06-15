@@ -21,7 +21,10 @@ except ImportError:
     get_user_model = lambda: User
 
 # DRF 3.0 compatibility layer
-try:
-    from rest_framework.decorators import action as detail_route
-except ImportError:
-    from rest_framework.decorators import detail_route
+from django.conf import settings
+
+if 'rest_framework' in settings.INSTALLED_APPS:
+    try:
+        from rest_framework.decorators import action as detail_route
+    except ImportError:
+        from rest_framework.decorators import detail_route
