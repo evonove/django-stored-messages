@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.template import RequestContext, Template
 
-from . import BaseTest
+from .base import BaseTest
 
 import stored_messages
 

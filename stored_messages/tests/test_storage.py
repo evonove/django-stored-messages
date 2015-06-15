@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from . import BackendBaseTest
+from .base import BackendBaseTest
 
 from django.contrib.messages.storage import default_storage
 from django.test.utils import override_settings

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from . import BaseTest
+from .base import BaseTest
 
 from stored_messages import mark_read, add_message_for, broadcast_message, mark_all_read
 from stored_messages.models import Inbox, MessageArchive

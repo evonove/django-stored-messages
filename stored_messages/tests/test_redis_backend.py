@@ -1,4 +1,4 @@
-from . import BaseTest
+from .base import BaseTest
 
 import unittest
 import mock

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from . import BaseTest
+from .base import BaseTest
 
 from django.contrib.auth.models import AnonymousUser
 
