@@ -42,7 +42,7 @@ STORED_MESSAGES = {
     'REDIS_URL': 'redis://localhost:6379/0',
 }
 
-MOCK_REDIS_SERVER = True
+MOCK_REDIS_SERVER = False
 
 import django
 

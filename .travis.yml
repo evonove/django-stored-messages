@@ -19,6 +19,9 @@ install:
   - pip install tox
   - pip install coveralls
 
+services:
+  - redis-server
+
 # command to run tests, e.g. python setup.py test
 script: tox -e $TOX_ENV
 
