@@ -11,8 +11,6 @@ from stored_messages import settings
 
 
 class BaseTest(TestCase):
-    urls = 'stored_messages.tests.urls'
-
     def setUp(self):
         self.factory = RequestFactory()
 
