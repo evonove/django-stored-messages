@@ -36,7 +36,6 @@ setup(
     install_requires=[
         'Django>=1.4',
     ],
-    test_suite='runtests.run_tests',
     license="BSD",
     zip_safe=False,
     keywords='django-stored-messages',
