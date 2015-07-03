@@ -6,6 +6,7 @@ import mock
 from django.conf import settings
 from django.core.cache import cache
 from django.contrib.auth.models import AnonymousUser
+from django.utils import timezone
 
 from stored_messages.backends.exceptions import MessageTypeNotSupported, MessageDoesNotExist
 from stored_messages.backends.redis import RedisBackend
@@ -140,3 +141,17 @@ class TestRedisBackend(BaseTest):
     def test_can_handle(self):
         self.assertFalse(self.backend.can_handle({}))
         self.assertTrue(self.backend.can_handle(self.message))
+
+    def test_message_expiration(self):
+        # start clean
+        self.backend._flush()
+        six_months_ago = timezone.now() + timezone.timedelta(days=-180)
+        message = self.backend.create_message(STORED_ERROR, 'A message for you', date=six_months_ago)
+        self.backend.expired_messages_cleanup()
+
+        keys = self.client.keys('user:*:notifications')
+        for k in keys:
+            _, user, _ = k.split(':')
+            self.assertEqual(self.backend._list_key(k), [])
+            self.assertEqual(self.backend._list('user:%s:notifications', user), [])
+            self.assertEqual(self.backend._list('user:%s:archive', user), [])

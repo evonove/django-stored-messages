@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from .base import BaseTest
 
 from django.contrib.auth.models import AnonymousUser
+from django.utils import timezone
 
 from stored_messages.backends.exceptions import MessageTypeNotSupported, MessageDoesNotExist
 from stored_messages.backends.default import DefaultBackend
@@ -74,3 +75,16 @@ class TestDefaultBackend(BaseTest):
     def test_can_handle(self):
         self.assertFalse(self.backend.can_handle({}))
         self.assertTrue(self.backend.can_handle(self.message))
+
+    def test_message_expiration(self):
+        six_months_ago = timezone.now() + timezone.timedelta(days=-180)
+        self.message.date = six_months_ago
+        self.message.save()
+        self.backend.expired_messages_cleanup()
+
+        n_archives = MessageArchive.objects.count()
+        n_inbox = Inbox.objects.count()
+        n_messages = Message.objects.count()
+        self.assertEqual(n_archives, 0)
+        self.assertEqual(n_inbox, 0)
+        self.assertEqual(n_messages, 0)

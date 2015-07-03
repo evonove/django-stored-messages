@@ -3,7 +3,7 @@ class StoredMessagesBackend(object):
     """
 
     """
-    def create_message(self, level, msg_text, extra_tags):
+    def create_message(self, level, msg_text, extra_tags, date=None):
         """
         Create and return a `Message` instance.
         Instance types depend on backends implementation.
@@ -12,6 +12,7 @@ class StoredMessagesBackend(object):
             `level`: message level (see django.contrib.messages)
             `msg_text`: what you think it is
             `extra_tags`: see django.contrib.messages
+            `date`: a DateTime (optional)
 
         Return:
             `Message` instance
@@ -129,6 +130,18 @@ class StoredMessagesBackend(object):
 
         Return:
             True if type is correct, False otherwise
+        """
+        raise NotImplementedError()
+
+    def expired_messages_cleanup(self):
+        """
+        Remove messages that have been expired.
+
+        Params:
+            None
+
+        Return:
+           None
         """
         raise NotImplementedError()
 

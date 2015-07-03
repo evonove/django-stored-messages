@@ -44,21 +44,27 @@ class RedisBackend(StoredMessagesBackend):
         """
         return Message(**json.loads(force_text(json_msg)))
 
-    def _list(self, key_tpl, user):
+    def _list_key(self, key):
         """
         boilerplate
         """
         ret = []
-        for msg_json in self.client.lrange(key_tpl % user.pk, 0, -1):
+        for msg_json in self.client.lrange(key, 0, -1):
             ret.append(self._fromJSON(msg_json))
         return ret
 
-    def create_message(self, level, msg_text, extra_tags=''):
+    def _list(self, key_tpl, user):
+        return self._list_key(key_tpl % user.pk)
+
+    def create_message(self, level, msg_text, extra_tags='', date=None):
         """
         Message instances are namedtuples of type `Message`.
         The date field is already serialized in datetime.isoformat ECMA-262 format
         """
-        now = timezone.now()
+        if not date:
+            now = timezone.now()
+        else:
+            now = date
         r = now.isoformat()
         if now.microsecond:
             r = r[:23] + r[26:]
@@ -116,3 +122,16 @@ class RedisBackend(StoredMessagesBackend):
 
     def can_handle(self, msg_instance):
         return isinstance(msg_instance, Message)
+
+    def expired_messages_cleanup(self):
+        expiration_date = timezone.now() + timezone.timedelta(
+            days=-stored_messages_settings.MESSAGE_EXPIRE_DAYS)
+        keys = self.client.keys('user:*:notifications')
+        for k in keys:
+            _, user, _ = k.split(':')
+            for m in self._list_key(k):
+                if m.date <= expiration_date:
+                    msg = json.dumps(m._asdict())
+                    self.client.lrem(k, 0, msg)
+                    self.client.srem('user:%s:notificationsidx' % user, m.id)
+                    self.client.rpop('user:%d:archive' % user, msg)

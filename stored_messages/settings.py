@@ -39,6 +39,7 @@ DEFAULTS = {
         STORED_ERROR: 'stored error',
     }),
     'INBOX_EXPIRE_DAYS': 30,
+    'MESSAGE_EXPIRE_DAYS': 120,
     'STORAGE_BACKEND': 'stored_messages.backends.DefaultBackend',
     # Only for Redis backend
     'REDIS_URL': 'redis://username:password@localhost:6379/0',
