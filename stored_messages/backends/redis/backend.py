@@ -10,6 +10,7 @@ import hashlib
 
 from ..exceptions import MessageTypeNotSupported, MessageDoesNotExist
 from ..base import StoredMessagesBackend
+from .. import signals
 from ...settings import stored_messages_settings
 
 try:
@@ -85,6 +86,7 @@ class RedisBackend(StoredMessagesBackend):
         if user.is_authenticated():
             self.client.delete('user:%d:notifications' % user.pk)
             self.client.delete('user:%d:notificationsidx' % user.pk)
+            signals.inbox_purged.send(sender=self.__class__, user=user)
 
     def inbox_store(self, users, msg_instance):
         if not self.can_handle(msg_instance):
@@ -97,11 +99,14 @@ class RedisBackend(StoredMessagesBackend):
                 self.client.sadd('user:%d:notificationsidx' % user.pk, msg_instance.id)
 
             self.client.rpush('user:%d:notifications' % user.pk, self._toJSON(msg_instance))
+            signals.inbox_stored.send(sender=self.__class__, user=user, message=msg_instance)
 
     def inbox_delete(self, user, msg_id):
         for m in self._list('user:%d:notifications', user):
             if m.id == msg_id:
-                return self.client.lrem('user:%d:notifications' % user.pk, 0, json.dumps(m._asdict()))
+                msg = self.client.lrem('user:%d:notifications' % user.pk, 0, json.dumps(m._asdict()))
+                signals.inbox_deleted.send(sender=self.__class__, user=user, message_id=msg_id)
+                return msg
         raise MessageDoesNotExist("Message with id %s does not exist" % msg_id)
 
     def inbox_get(self, user, msg_id):
@@ -116,6 +121,7 @@ class RedisBackend(StoredMessagesBackend):
 
         for user in users:
             self.client.rpush('user:%d:archive' % user.pk, self._toJSON(msg_instance))
+            signals.archive_stored.send(sender=self.__class__, user=user, message=msg_instance)
 
     def archive_list(self, user):
         return self._list('user:%d:archive', user)

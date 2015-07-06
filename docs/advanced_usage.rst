@@ -22,3 +22,19 @@ so that messages which types are configured to be persisted will be actually sav
 and all the others will be passed to the default storage. The mixin could also be implemented
 together with a more specialized storage provided by the user and not necessarily one of those
 provided by Django.
+
+
+Signals
+-------
+
+A few hooks are available in `backends.signals`.
+
+For inbox we raise the following signals:
+
+* `inbox_stored`: a message has been stored, providing `user` and `message` as arguments
+* `inbox_deleted`: a message has been deleted, providing `user` and `message_id` as arguments
+* `inbox_purged`: the inbox has been purged, providing `user` as argument
+
+For archive we raise the following signals:
+
+* `archive_stored`: a message has been stored, providing `user` and `message` as arguments

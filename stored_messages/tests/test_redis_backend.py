@@ -11,6 +11,7 @@ from django.utils import timezone
 from stored_messages.backends.exceptions import MessageTypeNotSupported, MessageDoesNotExist
 from stored_messages.backends.redis import RedisBackend
 from stored_messages.backends.redis.backend import Message
+from stored_messages.backends import signals
 
 from stored_messages import STORED_ERROR
 
@@ -84,6 +85,7 @@ class TestRedisBackend(BaseTest):
         self.backend._flush()
         self.message = self.backend.create_message(STORED_ERROR, 'A message for you')
         self.anon = AnonymousUser()
+        self.signals = {}
 
     def test_inbox_store(self):
         self.backend.inbox_store([self.user], self.message)
@@ -155,3 +157,45 @@ class TestRedisBackend(BaseTest):
             self.assertEqual(self.backend._list_key(k), [])
             self.assertEqual(self.backend._list('user:%s:notifications', user), [])
             self.assertEqual(self.backend._list('user:%s:archive', user), [])
+
+    def test_inbox_signals(self):
+        # connect
+        signals.inbox_stored.connect(self.inbox_stored)
+        signals.inbox_deleted.connect(self.inbox_deleted)
+        signals.inbox_purged.connect(self.inbox_purged)
+
+        self.backend.inbox_store([self.user], self.message)
+        self.backend.inbox_delete(self.user, self.message.id)
+        self.backend.inbox_purge(self.user)
+
+        # disconnect
+        signals.inbox_stored.disconnect(self.inbox_stored)
+        signals.inbox_deleted.disconnect(self.inbox_deleted)
+        signals.inbox_purged.disconnect(self.inbox_purged)
+
+        self.assertIn('inbox_stored', self.signals)
+        self.assertIn('inbox_deleted', self.signals)
+        self.assertIn('inbox_purged', self.signals)
+
+    def inbox_stored(self, **kwargs):
+        self.signals['inbox_stored'] = (kwargs['user'], kwargs['message'])
+
+    def inbox_deleted(self, **kwargs):
+        self.signals['inbox_deleted'] = (kwargs['user'], kwargs['message_id'])
+
+    def inbox_purged(self, **kwargs):
+        self.signals['inbox_purged'] = (kwargs['user'])
+
+    def test_archive_signals(self):
+        # connect
+        signals.archive_stored.connect(self.archive_stored)
+
+        self.backend.archive_store([self.user], self.message)
+
+        # disconnect
+        signals.archive_stored.disconnect(self.archive_stored)
+
+        self.assertIn('archive_stored', self.signals)
+
+    def archive_stored(self, **kwargs):
+        self.signals['archive_stored'] = (kwargs['user'], kwargs['message'])
