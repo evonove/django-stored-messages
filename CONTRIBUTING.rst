@@ -75,9 +75,10 @@ Ready to contribute? Here's how to set up `django-stored-messages` for local dev
 Now you can make your changes locally.
 
 5. When you're done making changes, check that your changes pass the tests, including testing
-other Python versions with tox::
+other Python versions with tox. **Remember to start a local instance of Redis before running the
+testsuite**::
 
-    $ python setup.py test
+    $ python runtests.py
     $ tox
 
 To get tox, just pip install it into your virtualenv.
