@@ -25,6 +25,7 @@ Features
 * Stored messages are archived in the database or in a Redis instance
 * Users can configure which message levels have to be persisted
 * REST api to retrieve and mark messages as read (needs djangorestframework v2 or v3 being installed)
+* Signalling api to perform actions in response to messages activity
 
 Requirements
 ------------
