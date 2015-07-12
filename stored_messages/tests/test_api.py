@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from .base import BaseTest
 
+from django.utils import timezone
+
 from stored_messages import mark_read, add_message_for, broadcast_message, mark_all_read
 from stored_messages.models import Inbox, MessageArchive
 from stored_messages.compat import get_user_model
@@ -26,10 +28,17 @@ class TestApi(BaseTest):
         self.assertRaises(MessageDoesNotExist, mark_read, self.user, msg_archive.message)
 
     def test_add_message_for(self):
+        now = timezone.now() + timezone.timedelta(days=-1)
         user2 = get_user_model().objects.create_user("another_user", "u@user.com", "123456")
-        add_message_for([user2, self.user], stored_messages.STORED_ERROR, 'Multiple errors')
+        add_message_for([user2, self.user], stored_messages.STORED_ERROR, 'Multiple errors', 'extra', now)
         self.assertEqual(Inbox.objects.count(), 2)
         self.assertEqual(MessageArchive.objects.count(), 2)
+
+        self.assertEqual(Inbox.objects.get(user=user2.id).message.tags, 'extra')
+        self.assertEqual(Inbox.objects.get(user=self.user).message.tags, 'extra')
+
+        self.assertEqual(Inbox.objects.get(user=user2.id).message.date, now)
+        self.assertEqual(Inbox.objects.get(user=self.user).message.date, now)
 
         self.assertEqual(Inbox.objects.get(user=user2.id).message.message, "Multiple errors")
         self.assertEqual(Inbox.objects.get(user=self.user).message.message, "Multiple errors")
