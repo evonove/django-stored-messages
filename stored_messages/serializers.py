@@ -7,3 +7,4 @@ class InboxSerializer(serializers.Serializer):
     level = serializers.IntegerField()
     tags = serializers.CharField()
     date = serializers.DateTimeField(format=None)
+    url = serializers.URLField(required=False)

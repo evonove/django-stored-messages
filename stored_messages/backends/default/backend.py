@@ -44,11 +44,12 @@ class DefaultBackend(StoredMessagesBackend):
         except Inbox.DoesNotExist:
             raise MessageDoesNotExist("Message with id %s does not exist" % msg_id)
 
-    def create_message(self, level, msg_text, extra_tags='', date=None):
+    def create_message(self, level, msg_text, extra_tags='', date=None, url=None):
         kwargs = {
             'message': msg_text,
             'level': level,
             'tags': extra_tags,
+            'url': url,
         }
         if date:
             kwargs['date'] = date

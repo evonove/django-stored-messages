@@ -20,7 +20,7 @@ except ImportError:
     pass
 
 
-Message = namedtuple('Message', ['id', 'message', 'level', 'tags', 'date'])
+Message = namedtuple('Message', ['id', 'message', 'level', 'tags', 'date', 'url'])
 
 
 class RedisBackend(StoredMessagesBackend):
@@ -57,7 +57,7 @@ class RedisBackend(StoredMessagesBackend):
     def _list(self, key_tpl, user):
         return self._list_key(key_tpl % user.pk)
 
-    def create_message(self, level, msg_text, extra_tags='', date=None):
+    def create_message(self, level, msg_text, extra_tags='', date=None, url=None):
         """
         Message instances are namedtuples of type `Message`.
         The date field is already serialized in datetime.isoformat ECMA-262 format
@@ -75,7 +75,7 @@ class RedisBackend(StoredMessagesBackend):
         fingerprint = r + msg_text
 
         msg_id = hashlib.sha256(fingerprint.encode('ascii', 'ignore')).hexdigest()
-        return Message(id=msg_id, message=msg_text, level=level, tags=extra_tags, date=r)
+        return Message(id=msg_id, message=msg_text, level=level, tags=extra_tags, date=r, url=url)
 
     def inbox_list(self, user):
         if user.is_anonymous():

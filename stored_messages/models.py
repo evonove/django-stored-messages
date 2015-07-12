@@ -18,6 +18,7 @@ class Message(models.Model):
     message = models.TextField()
     level = models.IntegerField()
     tags = models.TextField()
+    url = models.URLField(null=True, blank=True)
     date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

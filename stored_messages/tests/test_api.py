@@ -29,8 +29,10 @@ class TestApi(BaseTest):
 
     def test_add_message_for(self):
         now = timezone.now() + timezone.timedelta(days=-1)
+        url = 'http://example.com/error'
+
         user2 = get_user_model().objects.create_user("another_user", "u@user.com", "123456")
-        add_message_for([user2, self.user], stored_messages.STORED_ERROR, 'Multiple errors', 'extra', now)
+        add_message_for([user2, self.user], stored_messages.STORED_ERROR, 'Multiple errors', 'extra', now, url)
         self.assertEqual(Inbox.objects.count(), 2)
         self.assertEqual(MessageArchive.objects.count(), 2)
 
@@ -39,6 +41,9 @@ class TestApi(BaseTest):
 
         self.assertEqual(Inbox.objects.get(user=user2.id).message.date, now)
         self.assertEqual(Inbox.objects.get(user=self.user).message.date, now)
+
+        self.assertEqual(Inbox.objects.get(user=user2.id).message.url, url)
+        self.assertEqual(Inbox.objects.get(user=self.user).message.url, url)
 
         self.assertEqual(Inbox.objects.get(user=user2.id).message.message, "Multiple errors")
         self.assertEqual(Inbox.objects.get(user=self.user).message.message, "Multiple errors")
