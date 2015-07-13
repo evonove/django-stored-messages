@@ -58,10 +58,24 @@ class TestApi(BaseTest):
         user2 = get_user_model().objects.create_user("user2", "u2@user.com", "123456")
         user3 = get_user_model().objects.create_user("user3", "u3@user.com", "123456")
 
-        broadcast_message( stored_messages.STORED_INFO, 'broadcast test message')
+        now = timezone.now() + timezone.timedelta(days=-1)
+        url = 'http://example.com/error'
+        broadcast_message( stored_messages.STORED_INFO, 'broadcast test message', 'extra', now, url)
         self.assertEqual(Inbox.objects.get(user=user1.id).message.message, "broadcast test message")
         self.assertEqual(Inbox.objects.get(user=user2.id).message.message, "broadcast test message")
         self.assertEqual(Inbox.objects.get(user=user3.id).message.message, "broadcast test message")
+
+        self.assertEqual(Inbox.objects.get(user=user1.id).message.tags, 'extra')
+        self.assertEqual(Inbox.objects.get(user=user2.id).message.tags, 'extra')
+        self.assertEqual(Inbox.objects.get(user=user3.id).message.tags, 'extra')
+
+        self.assertEqual(Inbox.objects.get(user=user1.id).message.date, now)
+        self.assertEqual(Inbox.objects.get(user=user2.id).message.date, now)
+        self.assertEqual(Inbox.objects.get(user=user3.id).message.date, now)
+
+        self.assertEqual(Inbox.objects.get(user=user1.id).message.url, url)
+        self.assertEqual(Inbox.objects.get(user=user2.id).message.url, url)
+        self.assertEqual(Inbox.objects.get(user=user3.id).message.url, url)
 
         self.assertEqual(MessageArchive.objects.get(user=user1.id).message.message,
                          "broadcast test message")
