@@ -3,8 +3,6 @@ from django.contrib.messages.storage.fallback import FallbackStorage
 from .settings import stored_messages_settings
 from .backends.exceptions import MessageTypeNotSupported
 
-BackendClass = stored_messages_settings.STORAGE_BACKEND
-
 
 class StorageMixin(object):
     """
@@ -18,6 +16,7 @@ class StorageMixin(object):
     """
     def __init__(self, request, *args, **kwargs):
         self.user = request.user
+        BackendClass = stored_messages_settings.STORAGE_BACKEND
         self.backend = BackendClass()
         super(StorageMixin, self).__init__(request, *args, **kwargs)
 
