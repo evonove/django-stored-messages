@@ -5,15 +5,12 @@ python: "3.4"
 sudo: false
 
 env:
-  - TOX_ENV=py27-django14
-  - TOX_ENV=py27-django15
-  - TOX_ENV=py27-django16
   - TOX_ENV=py27-django17
   - TOX_ENV=py27-django18
-  - TOX_ENV=py34-django15
-  - TOX_ENV=py34-django16
+  - TOX_ENV=py27-django19
   - TOX_ENV=py34-django17
   - TOX_ENV=py34-django18
+  - TOX_ENV=py34-django19
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
