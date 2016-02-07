@@ -3,8 +3,17 @@
 
 import os
 import sys
+import re
 
-version = '1.3.0'  # when changing this, please take a moment for doing the same in docs/conf.py
+def get_version(package):
+    """
+    Return package version as listed in `__version__` in `init.py`.
+    """
+    init_py = open(os.path.join(package, '__init__.py')).read()
+    return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
+
+
+version = get_version('stored_messages')
 
 try:
     from setuptools import setup
