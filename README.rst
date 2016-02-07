@@ -14,17 +14,17 @@ Django Stored Messages
 Django contrib.messages on steroids
 
 The app integrates smoothly with Django's `messages framework <http://docs.djangoproject.com/en/dev/ref/contrib/messages/>`_
-(`django.contrib.messages`), but users can decide which messages have to be stored on the database
+(``django.contrib.messages``), but users can decide which messages have to be stored on the database
 backend and kept available over sessions.
 
 Features
 --------
 
-* Seamless integration with `django.contrib.messages`
+* Seamless integration with ``django.contrib.messages``
 * All the features are in a mixin you can attach to your existing storage
 * Stored messages are archived in the database or in a Redis instance
 * Users can configure which message levels have to be persisted
-* REST api to retrieve and mark messages as read (needs djangorestframework v2 or v3 being installed)
+* REST api to retrieve and mark messages as read (needs ``djangorestframework``)
 * Signalling api to perform actions in response to messages activity
 
 Compatibility table
