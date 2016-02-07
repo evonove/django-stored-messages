@@ -27,12 +27,12 @@ Features
 * REST api to retrieve and mark messages as read (needs djangorestframework v2 or v3 being installed)
 * Signalling api to perform actions in response to messages activity
 
-Requirements
-------------
+Compatibility table
+-------------------
 
-* Django 1.4/1.5/1.6/1.7/1.8
-* Python 2.7/3.4
-* DRF 2/3 (only if you want to use REST endpoints)
+* Python 2.7, 3.4
+* Django 1.4, 1.5, 1.6, 1.7, 1.8
+* Django Rest Framework 2.4.x, 3.1.x (only if you want to use REST endpoints)
 
 Documentation
 -------------

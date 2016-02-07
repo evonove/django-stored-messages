@@ -20,7 +20,7 @@ except ImportError:
     from django.contrib.auth.models import User
     get_user_model = lambda: User
 
-# DRF 3.0 compatibility layer
+# DRF >= 3.0 and DRF < 3.2 compatibility layer
 from django.conf import settings
 
 if 'rest_framework' in settings.INSTALLED_APPS:
