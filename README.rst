@@ -43,25 +43,34 @@ Quickstart
 ----------
 
 Follow instruction for firing up `django.contrib.messages <http://docs.djangoproject.com/en/dev/ref/contrib/messages/>`_,
-then install the app::
+then install the app:
+
+.. code-block:: python
 
     pip install django-stored-messages
 
-Add it to the installed apps::
+Add it to the installed apps:
+
+.. code-block:: python
 
     INSTALLED_APPS = (
         # ...
         'stored_messages',
     )
 
-In the settings, tell Django which is the message storage::
+In the settings, tell Django which is the message storage:
+
+.. code-block:: python
 
     MESSAGE_STORAGE = 'stored_messages.storage.PersistentStorage'
 
 Then use it in a project through the django.contrib.messages api. The app provides for convenience
-some message levels which are persisted by default::
+some message levels which are persisted by default:
+
+.. code-block:: python
 
     import stored_messages
+
     from django.contrib import messages
 
     # standard message
@@ -69,36 +78,49 @@ some message levels which are persisted by default::
     # this will be persisted and marked as 'unread'
     messages.add_message(request, stored_messages.STORED_INFO, 'Hello world, to the database!')
 
-stored_messages expose the same api as well, so one can do::
+stored_messages expose the same api as well, so one can do:
+
+.. code-block:: python
 
     import stored_messages
     stored_messages.add_message(request, stored_messages.INFO, 'Hello!')
 
 If you want to use standard message levels but persist the messages, just add something like this
-to the settings::
+to the settings:
+
+.. code-block:: python
 
     from django.contrib import messages
+
     STORED_MESSAGES = {
         # persist standard infos and standard errors
         'STORE_LEVELS': (messages.INFO, messages.ERROR,),
     }
 
-Iterating the messages will automatically mark them as read (but still persisted)::
+Iterating the messages will automatically mark them as read (but still persisted):
+
+.. code-block:: python
 
     storage = messages.get_messages(request)
     for unread_message in storage:
         # unread_message could be a stored message or a "standard" Django message
         do_something_with(unread_message)
 
-...unless you mark the storage as not used::
+...unless you mark the storage as not used:
+
+.. code-block:: python
 
    storage.used = False
 
-You can mark a stored message as read at any time::
+You can mark a stored message as read at any time:
+
+.. code-block:: python
 
     stored_messages.mark_read(request.user, message)
 
-Want to store your messages on Redis instead of your database? Here you go::
+Want to store your messages on Redis instead of your database? Here you go:
+
+.. code-block:: python
 
     STORED_MESSAGES = {
         'STORAGE_BACKEND': 'stored_messages.backends.RedisBackend',
