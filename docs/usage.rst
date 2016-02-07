@@ -17,6 +17,7 @@ message levels (both provided by Django or custom) which have to be persisted. F
         INFO,
         ERROR,
     ),
+
 tells django-stored-messages to persist messages of level `INFO` and `ERROR`, both provided by
 Django. django-stored-messages provides a set of message levels for convenience that can be used
 to store message without setting anything and letting Django levels to behave normally:
