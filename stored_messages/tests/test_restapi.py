@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from .base import BackendBaseTest
-
-from django.core.urlresolvers import reverse
-from django.test.utils import override_settings
-from unittest import skipUnless
 
 import json
 
+from unittest import skipUnless
+from django.core.urlresolvers import reverse
+from django.test.utils import override_settings
+
 from stored_messages.constants import STORED_ERROR
 
+from .base import BackendBaseTest
+
 try:
-    import rest_framework
+    import rest_framework  # noqa
     rest_framework_installed = True
 except ImportError:
     rest_framework_installed = False
@@ -38,7 +39,7 @@ class TestRESTApi(BackendBaseTest):
         messages = json.loads(r.content.decode('utf-8'))
         id = messages[0]['id']
 
-        r = self.client.get(reverse('stored_messages:inbox-detail', kwargs={'pk':id}))
+        r = self.client.get(reverse('stored_messages:inbox-detail', kwargs={'pk': id}))
 
         message = json.loads(r.content.decode('utf-8'))
         self.assertEqual(message['message'], 'an error ☢')

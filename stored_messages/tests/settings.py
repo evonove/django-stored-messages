@@ -1,3 +1,6 @@
+# flake8: noqa
+import django
+
 
 INSTALLED_APPS = [
     "django.contrib.auth",
@@ -14,7 +17,6 @@ try:
 except ImportError:
     pass
 
-
 DEBUG = True
 USE_TZ = True
 
@@ -27,13 +29,16 @@ DATABASES = {
 
 ROOT_URLCONF = "stored_messages.tests.urls"
 
-# Django 1.7 has a new, minimal default set for MIDDLEWARE_CLASSES so be explicit
+# Django 1.8 has a new, minimal default set for MIDDLEWARE_CLASSES so be explicit
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 )
 
 SITE_ID = 1
@@ -44,13 +49,4 @@ STORED_MESSAGES = {
 }
 
 MOCK_REDIS_SERVER = False
-
-import django
-
-if django.VERSION[:2] < (1, 6):
-    TEST_RUNNER = 'discover_runner.DiscoverRunner'
-    INSTALLED_APPS.append('discover_runner')
-else:
-    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
 SECRET_KEY = 'FUUUFU'

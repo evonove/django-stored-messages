@@ -60,7 +60,7 @@ class TestApi(BaseTest):
 
         now = timezone.now() + timezone.timedelta(days=-1)
         url = 'http://example.com/error'
-        broadcast_message( stored_messages.STORED_INFO, 'broadcast test message', 'extra', now, url)
+        broadcast_message(stored_messages.STORED_INFO, 'broadcast test message', 'extra', now, url)
         self.assertEqual(Inbox.objects.get(user=user1.id).message.message, "broadcast test message")
         self.assertEqual(Inbox.objects.get(user=user2.id).message.message, "broadcast test message")
         self.assertEqual(Inbox.objects.get(user=user3.id).message.message, "broadcast test message")

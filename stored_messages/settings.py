@@ -15,12 +15,13 @@ then falling back to the defaults.
 """
 from __future__ import unicode_literals
 
+import importlib
+
 from django.conf import settings
 from django.utils import six
 
-import importlib
-
 from .constants import *
+
 
 USER_SETTINGS = getattr(settings, 'STORED_MESSAGES', None)
 MESSAGE_TAGS = getattr(settings, 'MESSAGE_TAGS', {})

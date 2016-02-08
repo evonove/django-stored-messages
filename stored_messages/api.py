@@ -1,10 +1,12 @@
+from .settings import stored_messages_settings
+
 
 __all__ = (
-    'add_message_for', 'broadcast_message',
-    'mark_read', 'mark_all_read',
+    'add_message_for',
+    'broadcast_message',
+    'mark_read',
+    'mark_all_read',
 )
-
-from .settings import stored_messages_settings
 
 
 def add_message_for(users, level, message_text, extra_tags='', date=None, url=None, fail_silently=False):

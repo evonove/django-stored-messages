@@ -69,7 +69,7 @@ try:
 
     if getattr(settings, 'MOCK_REDIS_SERVER', True):
         patcher = mock.patch('stored_messages.backends.redis.backend.redis')
-        redis = patcher.start()
+        redis = patcher.start()  # noqa
         redis.StrictRedis = RedisMock
 
 except ImportError:
@@ -148,7 +148,7 @@ class TestRedisBackend(BaseTest):
         # start clean
         self.backend._flush()
         six_months_ago = timezone.now() + timezone.timedelta(days=-180)
-        message = self.backend.create_message(STORED_ERROR, 'A message for you', date=six_months_ago)
+        self.backend.create_message(STORED_ERROR, 'A message for you', date=six_months_ago)
         self.backend.expired_messages_cleanup()
 
         keys = self.client.keys('user:*:notifications')
