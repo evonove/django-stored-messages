@@ -30,9 +30,14 @@ Features
 Compatibility table
 -------------------
 
-* Python 2.7, 3.4
-* Django 1.4, 1.5, 1.6, 1.7, 1.8
-* Django Rest Framework 2.4.x, 3.1.x (only if you want to use REST endpoints)
+* Python 2.7, 3.4, 3.5
+* Django 1.8, 1.9
+* Django Rest Framework >= 3.2 (only if you want to use REST endpoints)
+
+Do you use an earlier version of Django or Django Rest Framework? An `old version of stored_messages`_ is available even
+if it's **not supported anymore**. Plan your migration to a new 2.x version.
+
+.. _old version of stored messages: https://github.com/evonove/django-stored-messages/tree/1.3.1
 
 Documentation
 -------------
