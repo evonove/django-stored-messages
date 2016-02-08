@@ -4,10 +4,7 @@ __all__ = (
     'mark_read', 'mark_all_read',
 )
 
-from stored_messages.compat import get_user_model
 from .settings import stored_messages_settings
-BackendClass = stored_messages_settings.STORAGE_BACKEND
-backend = BackendClass()
 
 
 def add_message_for(users, level, message_text, extra_tags='', date=None, url=None, fail_silently=False):
@@ -22,6 +19,8 @@ def add_message_for(users, level, message_text, extra_tags='', date=None, url=No
     :param url: an optional url
     :param fail_silently: not used at the moment
     """
+    BackendClass = stored_messages_settings.STORAGE_BACKEND
+    backend = BackendClass()
     m = backend.create_message(level, message_text, extra_tags, date, url)
     backend.archive_store(users, m)
     backend.inbox_store(users, m)
@@ -38,6 +37,7 @@ def broadcast_message(level, message_text, extra_tags='', date=None, url=None, f
     :param url: an optional url
     :param fail_silently: not used at the moment
     """
+    from stored_messages.compat import get_user_model
     users = get_user_model().objects.all()
     add_message_for(users, level, message_text, extra_tags=extra_tags, date=date, url=url, fail_silently=fail_silently)
 
@@ -51,6 +51,8 @@ def mark_read(user, message):
     :param user: user instance for the recipient
     :param message: a Message instance to mark as read
     """
+    BackendClass = stored_messages_settings.STORAGE_BACKEND
+    backend = BackendClass()
     backend.inbox_delete(user, message)
 
 
@@ -60,4 +62,6 @@ def mark_all_read(user):
 
     :param user: user instance for the recipient
     """
+    BackendClass = stored_messages_settings.STORAGE_BACKEND
+    backend = BackendClass()
     backend.inbox_purge(user)

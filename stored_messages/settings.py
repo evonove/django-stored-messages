@@ -16,7 +16,9 @@ then falling back to the defaults.
 from __future__ import unicode_literals
 
 from django.conf import settings
-from django.utils import six, importlib
+from django.utils import six
+
+import importlib
 
 from .constants import *
 

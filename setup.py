@@ -43,7 +43,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'Django>=1.4,<1.9',
+        'Django>=1.7',
     ],
     license="BSD",
     zip_safe=False,
