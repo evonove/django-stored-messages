@@ -1,2 +1,2 @@
-djangorestframework>=3.2
+djangorestframework>=3.3
 redis
