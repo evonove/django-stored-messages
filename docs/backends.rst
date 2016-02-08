@@ -37,7 +37,5 @@ Users' inbox and archives are persisted on a Redis instance. Keys are in the for
 Implementing your own backend
 -----------------------------
 
-Custom backends should derive from `StoredMessagesBackend` class and implement all the methods:
-
-.. autoclass:: stored_messages.backends.base.StoredMessagesBackend
-    :members:
+Custom backends should derive from ``stored_messages.backends.base.StoredMessagesBackend`` class
+and implement all defined methods.
