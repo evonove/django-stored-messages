@@ -2,11 +2,11 @@
 from __future__ import unicode_literals
 from .base import BaseTest
 
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from stored_messages import mark_read, add_message_for, broadcast_message, mark_all_read
 from stored_messages.models import Inbox, MessageArchive
-from stored_messages.compat import get_user_model
 from stored_messages.backends.exceptions import MessageDoesNotExist
 import stored_messages
 

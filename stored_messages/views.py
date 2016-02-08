@@ -1,12 +1,11 @@
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
 
 from django.contrib.auth.decorators import login_required
 
 from .serializers import InboxSerializer
 from .backends.exceptions import MessageDoesNotExist
-from .compat import detail_route
 
 
 class InboxViewSet(viewsets.ViewSet):

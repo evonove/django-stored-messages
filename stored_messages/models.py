@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
-from .compat import AUTH_USER_MODEL
 from .settings import stored_messages_settings
 
 
@@ -31,7 +31,7 @@ class MessageArchive(models.Model):
     This model holds all the messages users received. Corresponding
     database table will grow indefinitely depending on messages traffic.
     """
-    user = models.ForeignKey(AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     message = models.ForeignKey(Message)
 
     def __str__(self):
@@ -46,7 +46,7 @@ class Inbox(models.Model):
     that they could be removed by a proper django command. We do not expect
     database table corresponding to this model to grow much.
     """
-    user = models.ForeignKey(AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     message = models.ForeignKey(Message)
 
     class Meta:

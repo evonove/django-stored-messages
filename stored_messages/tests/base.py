@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase, RequestFactory
 from django.utils.six.moves import reload_module
 
 import mock
 
-from stored_messages.compat import get_user_model
 from stored_messages import storage
 from stored_messages import settings
 

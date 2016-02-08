@@ -37,7 +37,7 @@ def broadcast_message(level, message_text, extra_tags='', date=None, url=None, f
     :param url: an optional url
     :param fail_silently: not used at the moment
     """
-    from stored_messages.compat import get_user_model
+    from django.contrib.auth import get_user_model
     users = get_user_model().objects.all()
     add_message_for(users, level, message_text, extra_tags=extra_tags, date=date, url=url, fail_silently=fail_silently)
 
