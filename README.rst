@@ -42,8 +42,10 @@ if it's **not supported anymore**. Anyway, plan a migration to a newer version.
 Documentation
 -------------
 
-The full documentation is at http://django-stored-messages.rtfd.org. It includes **migrations instruction** if you're
+The full documentation is at http://django-stored-messages.rtfd.org. It includes `migration instructions`_ if you're
 migrating from an earlier version of ``stored_messages``.
+
+.. _migration instructions: http://django-stored-messages.readthedocs.org/en/latest/migrations.html
 
 Quickstart
 ----------
