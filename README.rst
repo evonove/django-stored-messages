@@ -69,6 +69,10 @@ In the settings, tell Django which is the message storage:
 
     MESSAGE_STORAGE = 'stored_messages.storage.PersistentStorage'
 
+As last step, don't forget to run Django migrations::
+
+    $ python manage.py migrate
+
 Then use it in a project through the django.contrib.messages api. The app provides for convenience
 some message levels which are persisted by default:
 
