@@ -51,11 +51,9 @@ Quickstart
 ----------
 
 Follow instruction for firing up `django.contrib.messages <http://docs.djangoproject.com/en/dev/ref/contrib/messages/>`_,
-then install the app:
+then install the app::
 
-.. code-block:: python
-
-    pip install django-stored-messages
+    $ pip install django-stored-messages
 
 Add it to the installed apps:
 
