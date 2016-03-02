@@ -37,7 +37,7 @@ Compatibility table
 Do you use an earlier version of Django or Django Rest Framework? An `old version of stored_messages`_ is available even
 if it's **not supported anymore**. Anyway, plan a migration to a newer version.
 
-.. _old version of stored messages: https://github.com/evonove/django-stored-messages/tree/1.3.1
+.. _old version of stored_messages: https://github.com/evonove/django-stored-messages/tree/1.3.1
 
 Documentation
 -------------
