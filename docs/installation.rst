@@ -36,3 +36,6 @@ default which adds persistent messages to the `storage.fallback.FallbackStorage`
 
     MESSAGE_STORAGE = 'stored_messages.storage.PersistentStorage'
 
+As last step, don't forget to run Django migrations::
+
+    $ python manage.py migrate
